@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iPhone Inventory Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c26;
+      --border: #2a2a38;
+      --accent: #7b61ff;
+      --accent2: #00d4aa;
+      --danger: #ff4d6a;
+      --warning: #ffb547;
+      --text: #f0f0f8;
+      --text-dim: #7a7a9a;
+      --text-dimmer: #44445a;
+      --card-glow: rgba(123, 97, 255, 0.08);
+    }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(123,97,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .logo-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .subtitle {
+      margin-top: 12px;
+      color: var(--text-dim);
+      font-size: 15px;
+      font-weight: 400;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent2);
+      font-family: 'DM Mono', monospace;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+    }
+
+    /* Main layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Panel */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+    .panel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      padding: 16px 24px 0;
+      gap: 4px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 8px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 10px 10px 0 0;
+      color: var(--text-dim);
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      border-bottom: none;
+    }
+    .tab.active {
+      background: var(--surface2);
+      color: var(--accent);
+      border-color: var(--accent);
+      border-bottom-color: var(--surface2);
+    }
+    .tab:hover:not(.active) { border-color: var(--text-dimmer); color: var(--text); }
+
+    /* Form area */
+    .form-area {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      margin: 0 24px;
+      padding: 20px;
+    }
+    .form-pane { display: none; }
+    .form-pane.active { display: block; }
+
+    /* Form inputs */
+    .field { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      font-family: 'DM Mono', monospace;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(123,97,255,0.15);
+    }
+    input::placeholder { color: var(--text-dimmer); }
+    select option { background: var(--surface2); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 6px;
+    }
+    .btn-add {
+      background: linear-gradient(135deg, var(--accent), #9b7fff);
+      color: #fff;
+    }
+    .btn-add:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(123,97,255,0.4); }
+    .btn-remove {
+      background: linear-gradient(135deg, var(--danger), #ff7089);
+      color: #fff;
+    }
+    .btn-remove:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,77,106,0.4); }
+    .btn-price {
+      background: linear-gradient(135deg, var(--warning), #ffcf7a);
+      color: #111;
+    }
+    .btn-price:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,181,71,0.4); }
+    .btn:active { transform: translateY(0); }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 100;
+      max-width: 90vw;
+      text-align: center;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.success { border-color: var(--accent2); color: var(--accent2); }
+    #toast.error { border-color: var(--danger); color: var(--danger); }
+
+    /* Inventory table panel */
+    .inventory-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .inv-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .inv-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+    .search-box {
+      padding: 8px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      outline: none;
+      width: 200px;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus { border-color: var(--accent); }
+    .search-box::placeholder { color: var(--text-dimmer); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      padding: 12px 20px;
+      text-align: left;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dimmer);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(42,42,56,0.5);
+      transition: background 0.15s;
+      cursor: default;
+    }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr:last-child { border-bottom: none; }
+    td {
+      padding: 14px 20px;
+      font-family: 'DM Mono', monospace;
+      white-space: nowrap;
+    }
+    .td-type { color: var(--text); font-weight: 500; }
+    .td-color { color: var(--text-dim); }
+    .td-memory {
+      color: var(--accent);
+      font-size: 12px;
+    }
+    .td-price { color: var(--accent2); font-weight: 500; }
+    .td-qty {}
+    .qty-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .qty-high { background: rgba(0,212,170,0.12); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
+    .qty-med  { background: rgba(255,181,71,0.12); color: var(--warning); border: 1px solid rgba(255,181,71,0.3); }
+    .qty-low  { background: rgba(255,77,106,0.12); color: var(--danger); border: 1px solid rgba(255,77,106,0.3); }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dimmer);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* Divider in form */
+    .form-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    .select-hint {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dimmer);
+      margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="logo-tag">Store Management System</div>
+    <h1>iPhone Inventory</h1>
+    <p class="subtitle">Track · Add · Remove · Price</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-models">—</div>
+      <div class="stat-label">Unique Models</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-units">—</div>
+      <div class="stat-label">Total Units</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-value">—</div>
+      <div class="stat-label">Total Value</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- Left: Actions Panel -->
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <span class="panel-title">Actions</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('add')">Add</button>
+          <button class="tab" onclick="switchTab('remove')">Remove</button>
+          <button class="tab" onclick="switchTab('price')">Price</button>
+        </div>
+
+        <!-- ADD FORM -->
+        <div class="form-area">
+          <div class="form-pane active" id="pane-add">
+            <div class="field">
+              <label>iPhone Type</label>
+              <input id="add-type" type="text" placeholder="e.g. iPhone 15 Pro Max"/>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Color</label>
+                <input id="add-color" type="text" placeholder="e.g. Black Titanium"/>
+              </div>
+              <div class="field">
+                <label>Memory</label>
+                <select id="add-memory">
+                  <option value="">Select</option>
+                  <option>64GB</option>
+                  <option>128GB</option>
+                  <option>256GB</option>
+                  <option>512GB</option>
+                  <option>1TB</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Price ($)</label>
+                <input id="add-price" type="number" step="0.01" min="0" placeholder="0.00"/>
+              </div>
+              <div class="field">
+                <label>Quantity</label>
+                <input id="add-qty" type="number" min="1" placeholder="1"/>
+              </div>
+            </div>
+            <p class="select-hint">If item exists, quantity is added and price updated.</p>
+            <button class="btn btn-add" onclick="handleAdd()">+ Add to Inventory</button>
+          </div>
+
+          <!-- REMOVE FORM -->
+          <div class="form-pane" id="pane-remove">
+            <div class="field">
+              <label>iPhone Type</label>
+              <input id="rem-type" type="text" placeholder="e.g. iPhone 15 Pro"/>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Color</label>
+                <input id="rem-color" type="text" placeholder="e.g. Blue Titanium"/>
+              </div>
+              <div class="field">
+                <label>Memory</label>
+                <select id="rem-memory">
+                  <option value="">Select</option>
+                  <option>64GB</option>
+                  <option>128GB</option>
+                  <option>256GB</option>
+                  <option>512GB</option>
+                  <option>1TB</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Units to Remove</label>
+              <input id="rem-qty" type="number" min="1" placeholder="1"/>
+            </div>
+            <p class="select-hint">If all units removed, item is deleted from inventory.</p>
+            <button class="btn btn-remove" onclick="handleRemove()">− Remove from Inventory</button>
+          </div>
+
+          <!-- PRICE FORM -->
+          <div class="form-pane" id="pane-price">
+            <div class="field">
+              <label>iPhone Type</label>
+              <input id="pr-type" type="text" placeholder="e.g. iPhone 14"/>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Color</label>
+                <input id="pr-color" type="text" placeholder="e.g. Midnight"/>
+              </div>
+              <div class="field">
+                <label>Memory</label>
+                <select id="pr-memory">
+                  <option value="">Select</option>
+                  <option>64GB</option>
+                  <option>128GB</option>
+                  <option>256GB</option>
+                  <option>512GB</option>
+                  <option>1TB</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>New Price ($)</label>
+              <input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/>
+            </div>
+            <button class="btn btn-price" onclick="handlePrice()">↻ Update Price</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Inventory Table -->
+    <div class="inventory-panel">
+      <div class="inv-header">
+        <span class="inv-title">Live Inventory</span>
+        <input class="search-box" type="text" id="search" placeholder="Search models..." oninput="renderTable()"/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Color</th>
+              <th>Memory</th>
+              <th>Price</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody id="inv-body">
+            <tr><td colspan="5" class="empty-state">Loading inventory...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  let inventory = [];
+
+  async function loadInventory() {
+    const res = await fetch('/api/inventory');
+    inventory = await res.json();
+    updateStats();
+    renderTable();
+  }
+
+  function updateStats() {
+    const totalUnits = inventory.reduce((s, i) => s + parseInt(i.quantity || 0), 0);
+    const totalValue = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
+    document.getElementById('stat-models').textContent = inventory.length;
+    document.getElementById('stat-units').textContent = totalUnits.toLocaleString();
+    document.getElementById('stat-value').textContent = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+  }
+
+  function renderTable() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const filtered = inventory.filter(i =>
+      Object.values(i).some(v => v.toLowerCase().includes(q))
+    );
+    const body = document.getElementById('inv-body');
+    if (filtered.length === 0) {
+      body.innerHTML = `<tr><td colspan="5" class="empty-state">No items found.</td></tr>`;
+      return;
+    }
+    body.innerHTML = filtered.map(i => {
+      const qty = parseInt(i.quantity);
+      const qtyClass = qty >= 8 ? 'qty-high' : qty >= 4 ? 'qty-med' : 'qty-low';
+      return `<tr>
+        <td class="td-type">${i.type}</td>
+        <td class="td-color">${i.color}</td>
+        <td class="td-memory">${i.memory}</td>
+        <td class="td-price">$${parseFloat(i.price).toFixed(2)}</td>
+        <td><span class="qty-badge ${qtyClass}">${qty}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', ['add','remove','price'][i] === tab);
+    });
+    document.querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById('pane-' + tab).classList.add('active');
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show ' + type;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.className = '', 3500);
+  }
+
+  async function handleAdd() {
+    const body = {
+      type: document.getElementById('add-type').value,
+      color: document.getElementById('add-color').value,
+      memory: document.getElementById('add-memory').value,
+      price: document.getElementById('add-price').value,
+      quantity: document.getElementById('add-qty').value,
+    };
+    const res = await fetch('/api/add', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { loadInventory(); clearForm('add'); }
+  }
+
+  async function handleRemove() {
+    const body = {
+      type: document.getElementById('rem-type').value,
+      color: document.getElementById('rem-color').value,
+      memory: document.getElementById('rem-memory').value,
+      quantity: document.getElementById('rem-qty').value,
+    };
+    const res = await fetch('/api/remove', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { loadInventory(); clearForm('remove'); }
+  }
+
+  async function handlePrice() {
+    const body = {
+      type: document.getElementById('pr-type').value,
+      color: document.getElementById('pr-color').value,
+      memory: document.getElementById('pr-memory').value,
+      price: document.getElementById('pr-price').value,
+    };
+    const res = await fetch('/api/update_price', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { loadInventory(); clearForm('price'); }
+  }
+
+  function clearForm(tab) {
+    const prefixes = { add: ['add-type','add-color','add-memory','add-price','add-qty'], remove: ['rem-type','rem-color','rem-memory','rem-qty'], price: ['pr-type','pr-color','pr-memory','pr-price'] };
+    prefixes[tab].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }
+
+  loadInventory();
+  setInterval(loadInventory, 10000);
+</script>
+</body>
+</html>
