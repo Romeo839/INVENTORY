@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>iPhone Inventory Manager</title>
-  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +20,6 @@
       --text: #f0f0f8;
       --text-dim: #7a7a9a;
       --text-dimmer: #44445a;
-      --card-glow: rgba(123, 97, 255, 0.08);
     }
 
     body {
@@ -32,7 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* Background grid */
     body::before {
       content: '';
       position: fixed;
@@ -65,10 +62,9 @@
       padding: 40px 24px 80px;
     }
 
-    /* Header */
     header {
       text-align: center;
-      margin-bottom: 56px;
+      margin-bottom: 48px;
     }
     .logo-tag {
       display: inline-block;
@@ -97,11 +93,9 @@
       margin-top: 12px;
       color: var(--text-dim);
       font-size: 15px;
-      font-weight: 400;
       font-family: 'DM Mono', monospace;
     }
 
-    /* Stats bar */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -131,7 +125,6 @@
       margin-top: 4px;
     }
 
-    /* Main layout */
     .main-grid {
       display: grid;
       grid-template-columns: 340px 1fr;
@@ -139,77 +132,49 @@
       align-items: start;
     }
 
-    /* Panel */
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    .panel-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .panel-title {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-dim);
-    }
-    .panel-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      padding: 16px 24px 0;
-      gap: 4px;
+    /* ---- Tabs ---- */
+    .tabs-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 0;
     }
     .tab {
-      flex: 1;
-      padding: 10px 8px;
-      background: none;
+      padding: 11px 6px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px 10px 0 0;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
       color: var(--text-dim);
       font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: all 0.2s;
-      border-bottom: none;
+      text-align: center;
     }
-    .tab.active {
-      background: var(--surface2);
-      color: var(--accent);
-      border-color: var(--accent);
-      border-bottom-color: var(--surface2);
-    }
-    .tab:hover:not(.active) { border-color: var(--text-dimmer); color: var(--text); }
+    .tab:hover:not(.active) { color: var(--text); border-color: var(--text-dimmer); }
+    .tab.active-restock  { background: var(--surface2); color: var(--accent);  border-color: var(--accent); }
+    .tab.active-new      { background: var(--surface2); color: var(--accent2); border-color: var(--accent2); }
+    .tab.active-remove   { background: var(--surface2); color: var(--danger);  border-color: var(--danger); }
+    .tab.active-price    { background: var(--surface2); color: var(--warning); border-color: var(--warning); }
 
-    /* Form area */
-    .form-area {
+    .form-box {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-      margin: 0 24px;
-      padding: 20px;
+      border-radius: 0 0 16px 16px;
+      padding: 22px;
     }
+    .form-box.border-restock { border-color: var(--accent); border-top-color: var(--surface2); }
+    .form-box.border-new     { border-color: var(--accent2); border-top-color: var(--surface2); }
+    .form-box.border-remove  { border-color: var(--danger); border-top-color: var(--surface2); }
+    .form-box.border-price   { border-color: var(--warning); border-top-color: var(--surface2); }
+
     .form-pane { display: none; }
     .form-pane.active { display: block; }
 
-    /* Form inputs */
     .field { margin-bottom: 14px; }
     label {
       display: block;
@@ -233,17 +198,41 @@
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
       appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
     }
+    input { cursor: text; }
     input:focus, select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(123,97,255,0.15);
     }
     input::placeholder { color: var(--text-dimmer); }
-    select option { background: var(--surface2); }
+    select option { background: var(--surface2); color: var(--text); }
+    select:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    /* Buttons */
+    .hint {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dimmer);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    /* current stock indicator */
+    .stock-indicator {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .stock-indicator.visible { display: block; }
+    .stock-indicator.ok  { background: rgba(0,212,170,0.1); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
+    .stock-indicator.low { background: rgba(255,77,106,0.1); color: var(--danger);  border: 1px solid rgba(255,77,106,0.3); }
+
     .btn {
       width: 100%;
       padding: 13px;
@@ -256,26 +245,19 @@
       letter-spacing: 1.5px;
       cursor: pointer;
       transition: all 0.2s;
-      margin-top: 6px;
+      margin-top: 4px;
     }
-    .btn-add {
-      background: linear-gradient(135deg, var(--accent), #9b7fff);
-      color: #fff;
-    }
-    .btn-add:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(123,97,255,0.4); }
-    .btn-remove {
-      background: linear-gradient(135deg, var(--danger), #ff7089);
-      color: #fff;
-    }
+    .btn-restock { background: linear-gradient(135deg, var(--accent), #9b7fff); color: #fff; }
+    .btn-restock:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(123,97,255,0.4); }
+    .btn-new  { background: linear-gradient(135deg, var(--accent2), #00ffcc); color: #0a0a0f; }
+    .btn-new:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,170,0.4); }
+    .btn-remove { background: linear-gradient(135deg, var(--danger), #ff7089); color: #fff; }
     .btn-remove:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,77,106,0.4); }
-    .btn-price {
-      background: linear-gradient(135deg, var(--warning), #ffcf7a);
-      color: #111;
-    }
-    .btn-price:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,181,71,0.4); }
+    .btn-price { background: linear-gradient(135deg, var(--warning), #ffcf7a); color: #111; }
+    .btn-price:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,181,71,0.4); }
     .btn:active { transform: translateY(0); }
 
-    /* Toast */
+    /* ---- Toast ---- */
     #toast {
       position: fixed;
       bottom: 32px; left: 50%;
@@ -283,7 +265,7 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 14px 24px;
+      padding: 14px 28px;
       font-family: 'DM Mono', monospace;
       font-size: 13px;
       color: var(--text);
@@ -296,9 +278,9 @@
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     #toast.success { border-color: var(--accent2); color: var(--accent2); }
-    #toast.error { border-color: var(--danger); color: var(--danger); }
+    #toast.error   { border-color: var(--danger);  color: var(--danger); }
 
-    /* Inventory table panel */
+    /* ---- Inventory table ---- */
     .inventory-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -311,6 +293,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
     }
     .inv-title {
       font-size: 14px;
@@ -330,17 +314,13 @@
       outline: none;
       width: 200px;
       transition: border-color 0.2s;
+      cursor: text;
     }
     .search-box:focus { border-color: var(--accent); }
     .search-box::placeholder { color: var(--text-dimmer); }
 
-    /* Table */
     .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th {
       padding: 12px 20px;
       text-align: left;
@@ -355,7 +335,6 @@
     tbody tr {
       border-bottom: 1px solid rgba(42,42,56,0.5);
       transition: background 0.15s;
-      cursor: default;
     }
     tbody tr:hover { background: var(--surface2); }
     tbody tr:last-child { border-bottom: none; }
@@ -364,14 +343,10 @@
       font-family: 'DM Mono', monospace;
       white-space: nowrap;
     }
-    .td-type { color: var(--text); font-weight: 500; }
+    .td-type  { color: var(--text); font-weight: 500; }
     .td-color { color: var(--text-dim); }
-    .td-memory {
-      color: var(--accent);
-      font-size: 12px;
-    }
-    .td-price { color: var(--accent2); font-weight: 500; }
-    .td-qty {}
+    .td-memory { color: var(--accent); font-size: 12px; }
+    .td-price  { color: var(--accent2); font-weight: 500; }
     .qty-badge {
       display: inline-block;
       padding: 3px 10px;
@@ -381,7 +356,7 @@
     }
     .qty-high { background: rgba(0,212,170,0.12); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
     .qty-med  { background: rgba(255,181,71,0.12); color: var(--warning); border: 1px solid rgba(255,181,71,0.3); }
-    .qty-low  { background: rgba(255,77,106,0.12); color: var(--danger); border: 1px solid rgba(255,77,106,0.3); }
+    .qty-low  { background: rgba(255,77,106,0.12); color: var(--danger);  border: 1px solid rgba(255,77,106,0.3); }
 
     .empty-state {
       text-align: center;
@@ -391,24 +366,11 @@
       font-size: 13px;
     }
 
-    /* Divider in form */
-    .form-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 16px 0;
-    }
-
-    .select-hint {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dimmer);
-      margin-top: 6px;
-    }
-
     @media (max-width: 768px) {
       .main-grid { grid-template-columns: 1fr; }
       .stats-bar { grid-template-columns: 1fr; }
       .field-row { grid-template-columns: 1fr; }
+      .tabs-row  { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -418,7 +380,7 @@
   <header>
     <div class="logo-tag">Store Management System</div>
     <h1>iPhone Inventory</h1>
-    <p class="subtitle">Track · Add · Remove · Price</p>
+    <p class="subtitle">Restock · Add New · Remove · Price</p>
   </header>
 
   <div class="stats-bar">
@@ -438,123 +400,145 @@
 
   <div class="main-grid">
 
-    <!-- Left: Actions Panel -->
+    <!-- Left: Actions -->
     <div>
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-dot"></div>
-          <span class="panel-title">Actions</span>
-        </div>
-
-        <div class="tabs">
-          <button class="tab active" onclick="switchTab('add')">Add</button>
-          <button class="tab" onclick="switchTab('remove')">Remove</button>
-          <button class="tab" onclick="switchTab('price')">Price</button>
-        </div>
-
-        <!-- ADD FORM -->
-        <div class="form-area">
-          <div class="form-pane active" id="pane-add">
-            <div class="field">
-              <label>iPhone Type</label>
-              <input id="add-type" type="text" placeholder="e.g. iPhone 15 Pro Max"/>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Color</label>
-                <input id="add-color" type="text" placeholder="e.g. Black Titanium"/>
-              </div>
-              <div class="field">
-                <label>Memory</label>
-                <select id="add-memory">
-                  <option value="">Select</option>
-                  <option>64GB</option>
-                  <option>128GB</option>
-                  <option>256GB</option>
-                  <option>512GB</option>
-                  <option>1TB</option>
-                </select>
-              </div>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Price ($)</label>
-                <input id="add-price" type="number" step="0.01" min="0" placeholder="0.00"/>
-              </div>
-              <div class="field">
-                <label>Quantity</label>
-                <input id="add-qty" type="number" min="1" placeholder="1"/>
-              </div>
-            </div>
-            <p class="select-hint">If item exists, quantity is added and price updated.</p>
-            <button class="btn btn-add" onclick="handleAdd()">+ Add to Inventory</button>
-          </div>
-
-          <!-- REMOVE FORM -->
-          <div class="form-pane" id="pane-remove">
-            <div class="field">
-              <label>iPhone Type</label>
-              <input id="rem-type" type="text" placeholder="e.g. iPhone 15 Pro"/>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Color</label>
-                <input id="rem-color" type="text" placeholder="e.g. Blue Titanium"/>
-              </div>
-              <div class="field">
-                <label>Memory</label>
-                <select id="rem-memory">
-                  <option value="">Select</option>
-                  <option>64GB</option>
-                  <option>128GB</option>
-                  <option>256GB</option>
-                  <option>512GB</option>
-                  <option>1TB</option>
-                </select>
-              </div>
-            </div>
-            <div class="field">
-              <label>Units to Remove</label>
-              <input id="rem-qty" type="number" min="1" placeholder="1"/>
-            </div>
-            <p class="select-hint">If all units removed, item is deleted from inventory.</p>
-            <button class="btn btn-remove" onclick="handleRemove()">− Remove from Inventory</button>
-          </div>
-
-          <!-- PRICE FORM -->
-          <div class="form-pane" id="pane-price">
-            <div class="field">
-              <label>iPhone Type</label>
-              <input id="pr-type" type="text" placeholder="e.g. iPhone 14"/>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Color</label>
-                <input id="pr-color" type="text" placeholder="e.g. Midnight"/>
-              </div>
-              <div class="field">
-                <label>Memory</label>
-                <select id="pr-memory">
-                  <option value="">Select</option>
-                  <option>64GB</option>
-                  <option>128GB</option>
-                  <option>256GB</option>
-                  <option>512GB</option>
-                  <option>1TB</option>
-                </select>
-              </div>
-            </div>
-            <div class="field">
-              <label>New Price ($)</label>
-              <input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/>
-            </div>
-            <button class="btn btn-price" onclick="handlePrice()">↻ Update Price</button>
-          </div>
-        </div>
+      <div class="tabs-row">
+        <button class="tab active-restock" onclick="switchTab('restock')">Restock</button>
+        <button class="tab" onclick="switchTab('new')">Add New</button>
+        <button class="tab" onclick="switchTab('remove')">Remove</button>
+        <button class="tab" onclick="switchTab('price')">Price</button>
       </div>
+
+      <div class="form-box border-restock" id="form-box">
+
+        <!-- RESTOCK -->
+        <div class="form-pane active" id="pane-restock">
+          <p class="hint">Select an existing iPhone to increase its stock quantity.</p>
+          <div class="field">
+            <label>iPhone Type</label>
+            <select id="rs-type" onchange="chainColor('rs')">
+              <option value="">— Select type —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Color</label>
+            <select id="rs-color" onchange="chainMemory('rs')" disabled>
+              <option value="">— Select color —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Memory</label>
+            <select id="rs-memory" onchange="showStock('rs')" disabled>
+              <option value="">— Select memory —</option>
+            </select>
+          </div>
+          <div class="stock-indicator" id="rs-stock"></div>
+          <div class="field">
+            <label>Units to Add</label>
+            <input id="rs-qty" type="number" min="1" placeholder="e.g. 5"/>
+          </div>
+          <button class="btn btn-restock" onclick="handleRestock()">＋ Restock Item</button>
+        </div>
+
+        <!-- ADD NEW -->
+        <div class="form-pane" id="pane-new">
+          <p class="hint">Introduce a brand new iPhone model not yet in the inventory.</p>
+          <div class="field">
+            <label>iPhone Type</label>
+            <input id="new-type" type="text" placeholder="e.g. iPhone 16 Pro Max"/>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Color</label>
+              <input id="new-color" type="text" placeholder="e.g. Desert Titanium"/>
+            </div>
+            <div class="field">
+              <label>Memory</label>
+              <select id="new-memory">
+                <option value="">Select</option>
+                <option>64GB</option>
+                <option>128GB</option>
+                <option>256GB</option>
+                <option>512GB</option>
+                <option>1TB</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Price ($)</label>
+              <input id="new-price" type="number" step="0.01" min="0" placeholder="0.00"/>
+            </div>
+            <div class="field">
+              <label>Quantity</label>
+              <input id="new-qty" type="number" min="1" placeholder="1"/>
+            </div>
+          </div>
+          <button class="btn btn-new" onclick="handleAddNew()">✦ Add to Inventory</button>
+        </div>
+
+        <!-- REMOVE -->
+        <div class="form-pane" id="pane-remove">
+          <p class="hint">Select an item and enter how many units to remove from stock.</p>
+          <div class="field">
+            <label>iPhone Type</label>
+            <select id="rem-type" onchange="chainColor('rem')">
+              <option value="">— Select type —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Color</label>
+            <select id="rem-color" onchange="chainMemory('rem')" disabled>
+              <option value="">— Select color —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Memory</label>
+            <select id="rem-memory" onchange="showStock('rem')" disabled>
+              <option value="">— Select memory —</option>
+            </select>
+          </div>
+          <div class="stock-indicator" id="rem-stock"></div>
+          <div class="field">
+            <label>Units to Remove</label>
+            <input id="rem-qty" type="number" min="1" placeholder="e.g. 2"/>
+          </div>
+          <button class="btn btn-remove" onclick="handleRemove()">− Remove from Stock</button>
+        </div>
+
+        <!-- PRICE -->
+        <div class="form-pane" id="pane-price">
+          <p class="hint">Select an item to update its selling price.</p>
+          <div class="field">
+            <label>iPhone Type</label>
+            <select id="pr-type" onchange="chainColor('pr')">
+              <option value="">— Select type —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Color</label>
+            <select id="pr-color" onchange="chainMemory('pr')" disabled>
+              <option value="">— Select color —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Memory</label>
+            <select id="pr-memory" onchange="showCurrentPrice('pr')" disabled>
+              <option value="">— Select memory —</option>
+            </select>
+          </div>
+          <div class="stock-indicator" id="pr-stock"></div>
+          <div class="field">
+            <label>New Price ($)</label>
+            <input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/>
+          </div>
+          <button class="btn btn-price" onclick="handlePrice()">↻ Update Price</button>
+        </div>
+
+      </div><!-- /form-box -->
     </div>
 
-    <!-- Right: Inventory Table -->
+    <!-- Right: Live Inventory Table -->
     <div class="inventory-panel">
       <div class="inv-header">
         <span class="inv-title">Live Inventory</span>
@@ -585,51 +569,209 @@
 
 <script>
   let inventory = [];
+  let optionsTree = {};   // { type: { color: [memory, ...] } }
+  let currentTab = 'restock';
 
-  async function loadInventory() {
-    const res = await fetch('/api/inventory');
-    inventory = await res.json();
+  const TAB_COLORS = {
+    restock: 'active-restock',
+    new:     'active-new',
+    remove:  'active-remove',
+    price:   'active-price',
+  };
+  const BOX_BORDERS = {
+    restock: 'border-restock',
+    new:     'border-new',
+    remove:  'border-remove',
+    price:   'border-price',
+  };
+
+  async function loadAll() {
+    const [invRes, optRes] = await Promise.all([
+      fetch('/api/inventory'),
+      fetch('/api/options')
+    ]);
+    inventory   = await invRes.json();
+    optionsTree = await optRes.json();
     updateStats();
     renderTable();
+    populateTypeDropdowns();
   }
 
   function updateStats() {
-    const totalUnits = inventory.reduce((s, i) => s + parseInt(i.quantity || 0), 0);
-    const totalValue = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
+    const totalUnits  = inventory.reduce((s, i) => s + parseInt(i.quantity || 0), 0);
+    const totalValue  = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
     document.getElementById('stat-models').textContent = inventory.length;
-    document.getElementById('stat-units').textContent = totalUnits.toLocaleString();
-    document.getElementById('stat-value').textContent = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+    document.getElementById('stat-units').textContent  = totalUnits.toLocaleString();
+    document.getElementById('stat-value').textContent  = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
   }
 
   function renderTable() {
     const q = document.getElementById('search').value.toLowerCase();
-    const filtered = inventory.filter(i =>
-      Object.values(i).some(v => v.toLowerCase().includes(q))
-    );
+    const filtered = inventory.filter(i => Object.values(i).some(v => v.toLowerCase().includes(q)));
     const body = document.getElementById('inv-body');
-    if (filtered.length === 0) {
+    if (!filtered.length) {
       body.innerHTML = `<tr><td colspan="5" class="empty-state">No items found.</td></tr>`;
       return;
     }
     body.innerHTML = filtered.map(i => {
       const qty = parseInt(i.quantity);
-      const qtyClass = qty >= 8 ? 'qty-high' : qty >= 4 ? 'qty-med' : 'qty-low';
+      const qc  = qty >= 8 ? 'qty-high' : qty >= 4 ? 'qty-med' : 'qty-low';
       return `<tr>
         <td class="td-type">${i.type}</td>
         <td class="td-color">${i.color}</td>
         <td class="td-memory">${i.memory}</td>
         <td class="td-price">$${parseFloat(i.price).toFixed(2)}</td>
-        <td><span class="qty-badge ${qtyClass}">${qty}</span></td>
+        <td><span class="qty-badge ${qc}">${qty}</span></td>
       </tr>`;
     }).join('');
   }
 
+  // ---- Tab switching ----
   function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach((t, i) => {
-      t.classList.toggle('active', ['add','remove','price'][i] === tab);
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach((el, i) => {
+      const keys = ['restock','new','remove','price'];
+      el.className = 'tab' + (keys[i] === tab ? ' ' + TAB_COLORS[tab] : '');
     });
     document.querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
     document.getElementById('pane-' + tab).classList.add('active');
+    const box = document.getElementById('form-box');
+    box.className = 'form-box ' + BOX_BORDERS[tab];
+  }
+
+  // ---- Populate all type dropdowns from optionsTree ----
+  function populateTypeDropdowns() {
+    const prefixes = ['rs', 'rem', 'pr'];
+    const types = Object.keys(optionsTree).sort();
+    prefixes.forEach(p => {
+      const sel = document.getElementById(p + '-type');
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">— Select type —</option>' +
+        types.map(t => `<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
+    });
+  }
+
+  // ---- Chained dropdowns ----
+  function chainColor(prefix) {
+    const type  = document.getElementById(prefix + '-type').value;
+    const cSel  = document.getElementById(prefix + '-color');
+    const mSel  = document.getElementById(prefix + '-memory');
+    cSel.innerHTML = '<option value="">— Select color —</option>';
+    mSel.innerHTML = '<option value="">— Select memory —</option>';
+    mSel.disabled = true;
+    hideStock(prefix);
+    if (!type) { cSel.disabled = true; return; }
+    const colors = Object.keys(optionsTree[type] || {}).sort();
+    cSel.innerHTML += colors.map(c => `<option value="${c}">${c}</option>`).join('');
+    cSel.disabled = false;
+  }
+
+  function chainMemory(prefix) {
+    const type  = document.getElementById(prefix + '-type').value;
+    const color = document.getElementById(prefix + '-color').value;
+    const mSel  = document.getElementById(prefix + '-memory');
+    mSel.innerHTML = '<option value="">— Select memory —</option>';
+    hideStock(prefix);
+    if (!color) { mSel.disabled = true; return; }
+    const memories = (optionsTree[type]?.[color] || []).sort();
+    mSel.innerHTML += memories.map(m => `<option value="${m}">${m}</option>`).join('');
+    mSel.disabled = false;
+  }
+
+  function showStock(prefix) {
+    const type   = document.getElementById(prefix + '-type').value;
+    const color  = document.getElementById(prefix + '-color').value;
+    const memory = document.getElementById(prefix + '-memory').value;
+    const el     = document.getElementById(prefix + '-stock');
+    if (!memory) { hideStock(prefix); return; }
+    const item = inventory.find(i =>
+      i.type.trim().toLowerCase()   === type.toLowerCase() &&
+      i.color.trim().toLowerCase()  === color.toLowerCase() &&
+      i.memory.trim().toLowerCase() === memory.toLowerCase()
+    );
+    if (!item) { hideStock(prefix); return; }
+    const qty = parseInt(item.quantity);
+    el.textContent = `Current stock: ${qty} unit${qty !== 1 ? 's' : ''}`;
+    el.className   = 'stock-indicator visible ' + (qty <= 3 ? 'low' : 'ok');
+  }
+
+  function showCurrentPrice(prefix) {
+    const type   = document.getElementById(prefix + '-type').value;
+    const color  = document.getElementById(prefix + '-color').value;
+    const memory = document.getElementById(prefix + '-memory').value;
+    const el     = document.getElementById(prefix + '-stock');
+    if (!memory) { hideStock(prefix); return; }
+    const item = inventory.find(i =>
+      i.type.trim().toLowerCase()   === type.toLowerCase() &&
+      i.color.trim().toLowerCase()  === color.toLowerCase() &&
+      i.memory.trim().toLowerCase() === memory.toLowerCase()
+    );
+    if (!item) { hideStock(prefix); return; }
+    el.textContent = `Current price: $${parseFloat(item.price).toFixed(2)}`;
+    el.className   = 'stock-indicator visible ok';
+  }
+
+  function hideStock(prefix) {
+    const el = document.getElementById(prefix + '-stock');
+    if (el) el.className = 'stock-indicator';
+  }
+
+  // ---- API calls ----
+  async function handleRestock() {
+    const body = {
+      type:     document.getElementById('rs-type').value,
+      color:    document.getElementById('rs-color').value,
+      memory:   document.getElementById('rs-memory').value,
+      quantity: document.getElementById('rs-qty').value,
+    };
+    const res  = await fetch('/api/restock', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { await loadAll(); clearInputs(['rs-qty']); }
+  }
+
+  async function handleAddNew() {
+    const body = {
+      type:     document.getElementById('new-type').value,
+      color:    document.getElementById('new-color').value,
+      memory:   document.getElementById('new-memory').value,
+      price:    document.getElementById('new-price').value,
+      quantity: document.getElementById('new-qty').value,
+    };
+    const res  = await fetch('/api/add', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { await loadAll(); clearInputs(['new-type','new-color','new-memory','new-price','new-qty']); }
+  }
+
+  async function handleRemove() {
+    const body = {
+      type:     document.getElementById('rem-type').value,
+      color:    document.getElementById('rem-color').value,
+      memory:   document.getElementById('rem-memory').value,
+      quantity: document.getElementById('rem-qty').value,
+    };
+    const res  = await fetch('/api/remove', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { await loadAll(); clearInputs(['rem-qty']); }
+  }
+
+  async function handlePrice() {
+    const body = {
+      type:   document.getElementById('pr-type').value,
+      color:  document.getElementById('pr-color').value,
+      memory: document.getElementById('pr-memory').value,
+      price:  document.getElementById('pr-price').value,
+    };
+    const res  = await fetch('/api/update_price', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) { await loadAll(); clearInputs(['pr-price']); }
+  }
+
+  function clearInputs(ids) {
+    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   }
 
   function showToast(msg, type) {
@@ -640,53 +782,8 @@
     t._timer = setTimeout(() => t.className = '', 3500);
   }
 
-  async function handleAdd() {
-    const body = {
-      type: document.getElementById('add-type').value,
-      color: document.getElementById('add-color').value,
-      memory: document.getElementById('add-memory').value,
-      price: document.getElementById('add-price').value,
-      quantity: document.getElementById('add-qty').value,
-    };
-    const res = await fetch('/api/add', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
-    if (data.success) { loadInventory(); clearForm('add'); }
-  }
-
-  async function handleRemove() {
-    const body = {
-      type: document.getElementById('rem-type').value,
-      color: document.getElementById('rem-color').value,
-      memory: document.getElementById('rem-memory').value,
-      quantity: document.getElementById('rem-qty').value,
-    };
-    const res = await fetch('/api/remove', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
-    if (data.success) { loadInventory(); clearForm('remove'); }
-  }
-
-  async function handlePrice() {
-    const body = {
-      type: document.getElementById('pr-type').value,
-      color: document.getElementById('pr-color').value,
-      memory: document.getElementById('pr-memory').value,
-      price: document.getElementById('pr-price').value,
-    };
-    const res = await fetch('/api/update_price', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
-    if (data.success) { loadInventory(); clearForm('price'); }
-  }
-
-  function clearForm(tab) {
-    const prefixes = { add: ['add-type','add-color','add-memory','add-price','add-qty'], remove: ['rem-type','rem-color','rem-memory','rem-qty'], price: ['pr-type','pr-color','pr-memory','pr-price'] };
-    prefixes[tab].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  }
-
-  loadInventory();
-  setInterval(loadInventory, 10000);
+  loadAll();
+  setInterval(loadAll, 15000);
 </script>
 </body>
 </html>

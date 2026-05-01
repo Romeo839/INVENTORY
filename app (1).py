@@ -45,8 +45,57 @@ def get_inventory():
     return jsonify(inventory)
 
 
+# Returns chained dropdown data built from the CSV
+@app.route("/api/options", methods=["GET"])
+def get_options():
+    inventory = read_inventory()
+    tree = {}
+    for item in inventory:
+        t = item["type"].strip()
+        c = item["color"].strip()
+        m = item["memory"].strip()
+        if t not in tree:
+            tree[t] = {}
+        if c not in tree[t]:
+            tree[t][c] = []
+        if m not in tree[t][c]:
+            tree[t][c].append(m)
+    return jsonify(tree)
+
+
+@app.route("/api/restock", methods=["POST"])
+def restock_item():
+    """Increase quantity of an existing item selected from dropdowns."""
+    data = request.json
+    itype = data.get("type", "").strip()
+    color = data.get("color", "").strip()
+    memory = data.get("memory", "").strip()
+    quantity = data.get("quantity", "")
+
+    if not all([itype, color, memory, quantity]):
+        return jsonify({"success": False, "message": "All fields are required."}), 400
+
+    try:
+        quantity = int(quantity)
+        if quantity <= 0:
+            raise ValueError
+    except ValueError:
+        return jsonify({"success": False, "message": "Quantity must be a positive integer."}), 400
+
+    inventory = read_inventory()
+    existing = find_item(inventory, itype, color, memory)
+
+    if not existing:
+        return jsonify({"success": False, "message": "Item not found in inventory."}), 404
+
+    existing["quantity"] = str(int(existing["quantity"]) + quantity)
+    write_inventory(inventory)
+    return jsonify({"success": True, "message": f"Restocked! New quantity: {existing['quantity']}."})
+
+
 @app.route("/api/add", methods=["POST"])
 def add_item():
+    """Add a brand new item not yet in the CSV."""
     data = request.json
     itype = data.get("type", "").strip()
     color = data.get("color", "").strip()
@@ -60,7 +109,7 @@ def add_item():
     try:
         price = float(price)
         quantity = int(quantity)
-        if price < 0 or quantity < 0:
+        if price < 0 or quantity <= 0:
             raise ValueError
     except ValueError:
         return jsonify({"success": False, "message": "Price must be a positive number and quantity a positive integer."}), 400
@@ -69,21 +118,18 @@ def add_item():
     existing = find_item(inventory, itype, color, memory)
 
     if existing:
-        existing["quantity"] = str(int(existing["quantity"]) + quantity)
-        existing["price"] = str(price)
-        write_inventory(inventory)
-        return jsonify({"success": True, "message": f"Updated existing item. New quantity: {existing['quantity']}.", "isNew": False})
-    else:
-        new_item = {
-            "type": itype,
-            "color": color,
-            "price": str(price),
-            "memory": memory,
-            "quantity": str(quantity),
-        }
-        inventory.append(new_item)
-        write_inventory(inventory)
-        return jsonify({"success": True, "message": f"New item '{itype} {color} {memory}' added to inventory.", "isNew": True})
+        return jsonify({"success": False, "message": "This item already exists. Use the Restock tab instead."}), 400
+
+    new_item = {
+        "type": itype,
+        "color": color,
+        "price": str(price),
+        "memory": memory,
+        "quantity": str(quantity),
+    }
+    inventory.append(new_item)
+    write_inventory(inventory)
+    return jsonify({"success": True, "message": f"'{itype} — {color} {memory}' added to inventory!"})
 
 
 @app.route("/api/remove", methods=["POST"])
@@ -92,7 +138,14 @@ def remove_item():
     itype = data.get("type", "").strip()
     color = data.get("color", "").strip()
     memory = data.get("memory", "").strip()
-    quantity = int(data.get("quantity", 1))
+    quantity = data.get("quantity", "")
+
+    try:
+        quantity = int(quantity)
+        if quantity <= 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        return jsonify({"success": False, "message": "Quantity must be a positive integer."}), 400
 
     inventory = read_inventory()
     existing = find_item(inventory, itype, color, memory)
@@ -112,7 +165,7 @@ def remove_item():
             i["memory"].strip().lower() == memory.lower()
         )]
         write_inventory(inventory)
-        return jsonify({"success": True, "message": f"All units removed. Item deleted from inventory."})
+        return jsonify({"success": True, "message": "All units removed. Item deleted from inventory."})
     else:
         existing["quantity"] = str(new_qty)
         write_inventory(inventory)
