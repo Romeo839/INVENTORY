@@ -4,416 +4,415 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>iPhone Inventory Manager</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a0f;
-      --surface: #13131a;
-      --surface2: #1c1c26;
-      --border: #2a2a38;
-      --accent: #7b61ff;
-      --accent2: #00d4aa;
-      --danger: #ff4d6a;
-      --warning: #ffb547;
-      --text: #f0f0f8;
-      --text-dim: #7a7a9a;
-      --text-dimmer: #44445a;
+      --white: #ffffff;
+      --off-white: #f9f9f7;
+      --light: #f2f2ef;
+      --border: #e5e5e2;
+      --border-dark: #d0d0cc;
+      --text: #1a1a18;
+      --text-mid: #4a4a46;
+      --text-dim: #8a8a84;
+      --accent: #1a1a18;
+      --accent2: #2d6a4f;
+      --danger: #c0392b;
+      --warning: #b7791f;
+      --success: #2d6a4f;
+      --radius: 6px;
+      --radius-lg: 10px;
     }
 
     body {
-      font-family: 'Syne', sans-serif;
-      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--off-white);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
+    /* Top nav bar */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
-      width: 800px; height: 800px;
-      background: radial-gradient(circle, rgba(123,97,255,0.12) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    .nav-brand span {
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      margin-left: 12px;
+    }
+    .nav-right {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     .container {
-      position: relative;
-      z-index: 1;
-      max-width: 1200px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 36px 40px 80px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .logo-tag {
-      display: inline-block;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      border: 1px solid var(--accent);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
-    h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-    }
-    .subtitle {
-      margin-top: 12px;
-      color: var(--text-dim);
-      font-size: 15px;
-      font-family: 'DM Mono', monospace;
-    }
-
+    /* Stats bar */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 40px;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 28px;
     }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: var(--white);
       padding: 20px 24px;
-      text-align: center;
-      transition: border-color 0.2s;
-    }
-    .stat-card:hover { border-color: var(--accent); }
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent2);
-      font-family: 'DM Mono', monospace;
     }
     .stat-label {
-      font-size: 12px;
-      color: var(--text-dim);
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-top: 4px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.5px;
     }
 
+    /* Main layout */
     .main-grid {
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 24px;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
       align-items: start;
     }
 
-    /* ---- Tabs ---- */
+    /* Action panel */
+    .action-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    /* Tabs */
     .tabs-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
     }
     .tab {
-      padding: 11px 6px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
+      padding: 13px 6px;
+      background: none;
+      border: none;
+      border-right: 1px solid var(--border);
       color: var(--text-dim);
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.2s;
+      letter-spacing: 0.8px;
+      transition: all 0.15s;
       text-align: center;
     }
-    .tab:hover:not(.active) { color: var(--text); border-color: var(--text-dimmer); }
-    .tab.active-restock  { background: var(--surface2); color: var(--accent);  border-color: var(--accent); }
-    .tab.active-new      { background: var(--surface2); color: var(--accent2); border-color: var(--accent2); }
-    .tab.active-remove   { background: var(--surface2); color: var(--danger);  border-color: var(--danger); }
-    .tab.active-price    { background: var(--surface2); color: var(--warning); border-color: var(--warning); }
-
-    .form-box {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 0 0 16px 16px;
-      padding: 22px;
+    .tab:last-child { border-right: none; }
+    .tab:hover:not(.active) { background: var(--off-white); color: var(--text); }
+    .tab.active {
+      background: var(--text);
+      color: var(--white);
     }
-    .form-box.border-restock { border-color: var(--accent); border-top-color: var(--surface2); }
-    .form-box.border-new     { border-color: var(--accent2); border-top-color: var(--surface2); }
-    .form-box.border-remove  { border-color: var(--danger); border-top-color: var(--surface2); }
-    .form-box.border-price   { border-color: var(--warning); border-top-color: var(--surface2); }
 
-    .form-pane { display: none; }
-    .form-pane.active { display: block; }
+    .form-area { padding: 22px 20px; }
 
     .field { margin-bottom: 14px; }
     label {
       display: block;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 0.8px;
       color: var(--text-dim);
-      margin-bottom: 6px;
-      font-family: 'DM Mono', monospace;
+      margin-bottom: 5px;
     }
     input, select {
       width: 100%;
-      padding: 10px 14px;
-      background: var(--surface);
+      padding: 9px 12px;
+      background: var(--off-white);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius);
       color: var(--text);
-      font-family: 'DM Mono', monospace;
+      font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.15s;
       appearance: none;
       -webkit-appearance: none;
-      cursor: pointer;
     }
-    input { cursor: text; }
     input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(123,97,255,0.15);
+      border-color: var(--text);
+      background: var(--white);
     }
-    input::placeholder { color: var(--text-dimmer); }
-    select option { background: var(--surface2); color: var(--text); }
+    input::placeholder { color: var(--text-dim); }
+    select option { background: var(--white); }
     select:disabled { opacity: 0.4; cursor: not-allowed; }
+    input { cursor: text; }
 
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
     .hint {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dimmer);
-      margin-bottom: 14px;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
       line-height: 1.5;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
 
-    /* current stock indicator */
     .stock-indicator {
-      font-family: 'DM Mono', monospace;
       font-size: 12px;
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 7px 11px;
+      border-radius: var(--radius);
       margin-bottom: 14px;
       display: none;
+      border: 1px solid;
     }
     .stock-indicator.visible { display: block; }
-    .stock-indicator.ok  { background: rgba(0,212,170,0.1); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
-    .stock-indicator.low { background: rgba(255,77,106,0.1); color: var(--danger);  border: 1px solid rgba(255,77,106,0.3); }
+    .stock-indicator.ok  { background: #f0faf4; color: var(--success); border-color: #c3e6d2; }
+    .stock-indicator.low { background: #fdf3f2; color: var(--danger);  border-color: #f5c6c2; }
 
+    /* Buttons */
     .btn {
       width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
+      padding: 11px;
+      border: 1px solid;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
       margin-top: 4px;
     }
-    .btn-restock { background: linear-gradient(135deg, var(--accent), #9b7fff); color: #fff; }
-    .btn-restock:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(123,97,255,0.4); }
-    .btn-new  { background: linear-gradient(135deg, var(--accent2), #00ffcc); color: #0a0a0f; }
-    .btn-new:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,170,0.4); }
-    .btn-remove { background: linear-gradient(135deg, var(--danger), #ff7089); color: #fff; }
-    .btn-remove:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,77,106,0.4); }
-    .btn-price { background: linear-gradient(135deg, var(--warning), #ffcf7a); color: #111; }
-    .btn-price:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,181,71,0.4); }
-    .btn:active { transform: translateY(0); }
+    .btn-restock {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--white);
+    }
+    .btn-restock:hover { background: #333; border-color: #333; }
+    .btn-new {
+      background: var(--white);
+      border-color: var(--text);
+      color: var(--text);
+    }
+    .btn-new:hover { background: var(--text); color: var(--white); }
+    .btn-remove {
+      background: var(--white);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+    .btn-remove:hover { background: var(--danger); color: var(--white); }
+    .btn-price {
+      background: var(--white);
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+    .btn-price:hover { background: var(--warning); color: var(--white); }
 
-    /* ---- Toast ---- */
+    /* Form panes */
+    .form-pane { display: none; }
+    .form-pane.active { display: block; }
+
+    /* Toast */
     #toast {
       position: fixed;
-      bottom: 32px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--surface2);
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 28px;
-      font-family: 'DM Mono', monospace;
+      border-radius: var(--radius);
+      padding: 12px 22px;
       font-size: 13px;
       color: var(--text);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
       opacity: 0;
-      transition: all 0.3s;
+      transition: all 0.25s;
       z-index: 100;
       max-width: 90vw;
       text-align: center;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    #toast.success { border-color: var(--accent2); color: var(--accent2); }
-    #toast.error   { border-color: var(--danger);  color: var(--danger); }
+    #toast.success { border-color: #c3e6d2; color: var(--success); }
+    #toast.error   { border-color: #f5c6c2; color: var(--danger); }
 
-    /* ---- Inventory table ---- */
+    /* Inventory table panel */
     .inventory-panel {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: var(--radius-lg);
       overflow: hidden;
     }
     .inv-header {
-      padding: 20px 24px;
+      padding: 16px 22px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: 12px;
     }
     .inv-title {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-dim);
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
     }
     .search-box {
-      padding: 8px 14px;
-      background: var(--surface2);
+      padding: 8px 12px;
+      background: var(--off-white);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius);
       color: var(--text);
-      font-family: 'DM Mono', monospace;
+      font-family: 'DM Sans', sans-serif;
       font-size: 12px;
       outline: none;
-      width: 200px;
-      transition: border-color 0.2s;
+      width: 190px;
+      transition: border-color 0.15s;
       cursor: text;
     }
-    .search-box:focus { border-color: var(--accent); }
-    .search-box::placeholder { color: var(--text-dimmer); }
+    .search-box:focus { border-color: var(--text); background: var(--white); }
+    .search-box::placeholder { color: var(--text-dim); }
 
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th {
-      padding: 12px 20px;
+      padding: 11px 20px;
       text-align: left;
-      font-family: 'DM Mono', monospace;
       font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-dimmer);
+      letter-spacing: 1.2px;
+      color: var(--text-dim);
+      font-weight: 500;
       border-bottom: 1px solid var(--border);
+      background: var(--off-white);
       white-space: nowrap;
     }
     tbody tr {
-      border-bottom: 1px solid rgba(42,42,56,0.5);
-      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
     }
-    tbody tr:hover { background: var(--surface2); }
+    tbody tr:hover { background: var(--off-white); }
     tbody tr:last-child { border-bottom: none; }
     td {
-      padding: 14px 20px;
-      font-family: 'DM Mono', monospace;
+      padding: 13px 20px;
       white-space: nowrap;
+      color: var(--text-mid);
     }
     .td-type  { color: var(--text); font-weight: 500; }
-    .td-color { color: var(--text-dim); }
-    .td-memory { color: var(--accent); font-size: 12px; }
-    .td-price  { color: var(--accent2); font-weight: 500; }
+    .td-memory { color: var(--text-dim); font-size: 12px; }
+    .td-price  { color: var(--text); font-weight: 500; }
+
     .qty-badge {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 2px 9px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
+      border: 1px solid;
     }
-    .qty-high { background: rgba(0,212,170,0.12); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
-    .qty-med  { background: rgba(255,181,71,0.12); color: var(--warning); border: 1px solid rgba(255,181,71,0.3); }
-    .qty-low  { background: rgba(255,77,106,0.12); color: var(--danger);  border: 1px solid rgba(255,77,106,0.3); }
+    .qty-high { background: #f0faf4; color: var(--success); border-color: #c3e6d2; }
+    .qty-med  { background: #fef9ec; color: var(--warning); border-color: #f9e4a8; }
+    .qty-low  { background: #fdf3f2; color: var(--danger);  border-color: #f5c6c2; }
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      color: var(--text-dimmer);
-      font-family: 'DM Mono', monospace;
+      padding: 56px 20px;
+      color: var(--text-dim);
       font-size: 13px;
     }
 
     @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .container { padding: 24px 20px 60px; }
       .main-grid { grid-template-columns: 1fr; }
       .stats-bar { grid-template-columns: 1fr; }
       .field-row { grid-template-columns: 1fr; }
-      .tabs-row  { grid-template-columns: repeat(2, 1fr); }
+      .tabs-row { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-<div class="container">
 
-  <header>
-    <div class="logo-tag">Store Management System</div>
-    <h1>iPhone Inventory</h1>
-    <p class="subtitle">Restock · Add New · Remove · Price</p>
-  </header>
+<nav>
+  <div class="nav-brand">
+    iPhone Inventory
+    <span>Store Management</span>
+  </div>
+  <div class="nav-right">Internal Use Only</div>
+</nav>
+
+<div class="container">
 
   <div class="stats-bar">
     <div class="stat-card">
-      <div class="stat-value" id="stat-models">—</div>
       <div class="stat-label">Unique Models</div>
+      <div class="stat-value" id="stat-models">—</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" id="stat-units">—</div>
       <div class="stat-label">Total Units</div>
+      <div class="stat-value" id="stat-units">—</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" id="stat-value">—</div>
       <div class="stat-label">Total Value</div>
+      <div class="stat-value" id="stat-value">—</div>
     </div>
   </div>
 
   <div class="main-grid">
 
     <!-- Left: Actions -->
-    <div>
+    <div class="action-panel">
       <div class="tabs-row">
-        <button class="tab active-restock" onclick="switchTab('restock')">Restock</button>
-        <button class="tab" onclick="switchTab('new')">Add New</button>
-        <button class="tab" onclick="switchTab('remove')">Remove</button>
-        <button class="tab" onclick="switchTab('price')">Price</button>
+        <button class="tab active" onclick="switchTab('restock', this)">Restock</button>
+        <button class="tab" onclick="switchTab('new', this)">Add New</button>
+        <button class="tab" onclick="switchTab('remove', this)">Remove</button>
+        <button class="tab" onclick="switchTab('price', this)">Price</button>
       </div>
 
-      <div class="form-box border-restock" id="form-box">
+      <div class="form-area">
 
         <!-- RESTOCK -->
         <div class="form-pane active" id="pane-restock">
-          <p class="hint">Select an existing iPhone to increase its stock quantity.</p>
+          <p class="hint">Select an existing iPhone to increase its stock.</p>
           <div class="field">
             <label>iPhone Type</label>
             <select id="rs-type" onchange="chainColor('rs')">
@@ -437,12 +436,12 @@
             <label>Units to Add</label>
             <input id="rs-qty" type="number" min="1" placeholder="e.g. 5"/>
           </div>
-          <button class="btn btn-restock" onclick="handleRestock()">＋ Restock Item</button>
+          <button class="btn btn-restock" onclick="handleRestock()">Restock Item</button>
         </div>
 
         <!-- ADD NEW -->
         <div class="form-pane" id="pane-new">
-          <p class="hint">Introduce a brand new iPhone model not yet in the inventory.</p>
+          <p class="hint">Introduce a new iPhone model not yet in the inventory.</p>
           <div class="field">
             <label>iPhone Type</label>
             <input id="new-type" type="text" placeholder="e.g. iPhone 16 Pro Max"/>
@@ -450,7 +449,7 @@
           <div class="field-row">
             <div class="field">
               <label>Color</label>
-              <input id="new-color" type="text" placeholder="e.g. Desert Titanium"/>
+              <input id="new-color" type="text" placeholder="e.g. Natural Titanium"/>
             </div>
             <div class="field">
               <label>Memory</label>
@@ -474,12 +473,12 @@
               <input id="new-qty" type="number" min="1" placeholder="1"/>
             </div>
           </div>
-          <button class="btn btn-new" onclick="handleAddNew()">✦ Add to Inventory</button>
+          <button class="btn btn-new" onclick="handleAddNew()">Add to Inventory</button>
         </div>
 
         <!-- REMOVE -->
         <div class="form-pane" id="pane-remove">
-          <p class="hint">Select an item and enter how many units to remove from stock.</p>
+          <p class="hint">Select an item and enter how many units to remove.</p>
           <div class="field">
             <label>iPhone Type</label>
             <select id="rem-type" onchange="chainColor('rem')">
@@ -503,7 +502,7 @@
             <label>Units to Remove</label>
             <input id="rem-qty" type="number" min="1" placeholder="e.g. 2"/>
           </div>
-          <button class="btn btn-remove" onclick="handleRemove()">− Remove from Stock</button>
+          <button class="btn btn-remove" onclick="handleRemove()">Remove from Stock</button>
         </div>
 
         <!-- PRICE -->
@@ -532,13 +531,13 @@
             <label>New Price ($)</label>
             <input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/>
           </div>
-          <button class="btn btn-price" onclick="handlePrice()">↻ Update Price</button>
+          <button class="btn btn-price" onclick="handlePrice()">Update Price</button>
         </div>
 
-      </div><!-- /form-box -->
+      </div>
     </div>
 
-    <!-- Right: Live Inventory Table -->
+    <!-- Right: Inventory Table -->
     <div class="inventory-panel">
       <div class="inv-header">
         <span class="inv-title">Live Inventory</span>
@@ -569,21 +568,7 @@
 
 <script>
   let inventory = [];
-  let optionsTree = {};   // { type: { color: [memory, ...] } }
-  let currentTab = 'restock';
-
-  const TAB_COLORS = {
-    restock: 'active-restock',
-    new:     'active-new',
-    remove:  'active-remove',
-    price:   'active-price',
-  };
-  const BOX_BORDERS = {
-    restock: 'border-restock',
-    new:     'border-new',
-    remove:  'border-remove',
-    price:   'border-price',
-  };
+  let optionsTree = {};
 
   async function loadAll() {
     const [invRes, optRes] = await Promise.all([
@@ -598,8 +583,8 @@
   }
 
   function updateStats() {
-    const totalUnits  = inventory.reduce((s, i) => s + parseInt(i.quantity || 0), 0);
-    const totalValue  = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
+    const totalUnits = inventory.reduce((s, i) => s + parseInt(i.quantity || 0), 0);
+    const totalValue = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
     document.getElementById('stat-models').textContent = inventory.length;
     document.getElementById('stat-units').textContent  = totalUnits.toLocaleString();
     document.getElementById('stat-value').textContent  = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
@@ -618,7 +603,7 @@
       const qc  = qty >= 8 ? 'qty-high' : qty >= 4 ? 'qty-med' : 'qty-low';
       return `<tr>
         <td class="td-type">${i.type}</td>
-        <td class="td-color">${i.color}</td>
+        <td>${i.color}</td>
         <td class="td-memory">${i.memory}</td>
         <td class="td-price">$${parseFloat(i.price).toFixed(2)}</td>
         <td><span class="qty-badge ${qc}">${qty}</span></td>
@@ -626,20 +611,13 @@
     }).join('');
   }
 
-  // ---- Tab switching ----
-  function switchTab(tab) {
-    currentTab = tab;
-    document.querySelectorAll('.tab').forEach((el, i) => {
-      const keys = ['restock','new','remove','price'];
-      el.className = 'tab' + (keys[i] === tab ? ' ' + TAB_COLORS[tab] : '');
-    });
+  function switchTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
     document.querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
     document.getElementById('pane-' + tab).classList.add('active');
-    const box = document.getElementById('form-box');
-    box.className = 'form-box ' + BOX_BORDERS[tab];
   }
 
-  // ---- Populate all type dropdowns from optionsTree ----
   function populateTypeDropdowns() {
     const prefixes = ['rs', 'rem', 'pr'];
     const types = Object.keys(optionsTree).sort();
@@ -651,11 +629,10 @@
     });
   }
 
-  // ---- Chained dropdowns ----
   function chainColor(prefix) {
-    const type  = document.getElementById(prefix + '-type').value;
-    const cSel  = document.getElementById(prefix + '-color');
-    const mSel  = document.getElementById(prefix + '-memory');
+    const type = document.getElementById(prefix + '-type').value;
+    const cSel = document.getElementById(prefix + '-color');
+    const mSel = document.getElementById(prefix + '-memory');
     cSel.innerHTML = '<option value="">— Select color —</option>';
     mSel.innerHTML = '<option value="">— Select memory —</option>';
     mSel.disabled = true;
@@ -716,7 +693,6 @@
     if (el) el.className = 'stock-indicator';
   }
 
-  // ---- API calls ----
   async function handleRestock() {
     const body = {
       type:     document.getElementById('rs-type').value,
