@@ -7,389 +7,169 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --navy:        #0f1f3d;
-      --navy-mid:    #1a3460;
-      --navy-light:  #254d8f;
-      --cream:       #f5f0e8;
-      --cream-dark:  #ede5d4;
-      --cream-mid:   #e0d5c0;
-      --gold:        #b8962e;
-      --gold-light:  #d4af5a;
-      --gold-pale:   #f0e4c0;
-      --text:        #0f1f3d;
-      --text-mid:    #2e4070;
-      --text-dim:    #6b7fa8;
-      --success:     #1e5c3a;
-      --success-bg:  #e8f4ed;
-      --success-bd:  #a8d4b8;
-      --danger:      #8b2020;
-      --danger-bg:   #faeaea;
-      --danger-bd:   #dda0a0;
-      --warning:     #7a5a10;
-      --warning-bg:  #fdf5e0;
-      --warning-bd:  #e8cc80;
-      --radius:      5px;
-      --radius-lg:   9px;
+      --navy: #0f1f3d; --navy-mid: #1a3460; --navy-light: #254d8f;
+      --cream: #f5f0e8; --cream-dark: #ede5d4; --cream-mid: #e0d5c0;
+      --gold: #b8962e; --gold-light: #d4af5a; --gold-pale: #f0e4c0;
+      --text: #0f1f3d; --text-mid: #2e4070; --text-dim: #6b7fa8;
+      --success: #1e5c3a; --success-bg: #e8f4ed; --success-bd: #a8d4b8;
+      --danger: #8b2020; --danger-bg: #faeaea; --danger-bd: #dda0a0;
+      --warning: #7a5a10; --warning-bg: #fdf5e0; --warning-bd: #e8cc80;
+      --radius: 5px; --radius-lg: 9px;
     }
-
-    body {
-      font-family: 'Jost', sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.6; }
 
     /* Nav */
     nav {
-      background: var(--navy);
-      border-bottom: 2px solid var(--gold);
-      padding: 0 40px;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      background: var(--navy); border-bottom: 2px solid var(--gold);
+      padding: 0 40px; height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
     }
-    .nav-brand {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      color: var(--cream);
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--cream); }
+    .nav-brand span { color: var(--gold-light); font-weight: 400; font-size: 13px; font-family: 'Jost', sans-serif; margin-left: 14px; letter-spacing: 2px; text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-user { text-align: right; }
+    .nav-user-name { font-size: 13px; color: var(--cream); font-weight: 500; }
+    .nav-user-role { font-size: 10px; color: var(--gold-light); letter-spacing: 1.5px; text-transform: uppercase; }
+    .btn-logout {
+      padding: 7px 16px; background: transparent;
+      border: 1px solid rgba(184,150,46,0.4); border-radius: var(--radius);
+      color: var(--gold-light); font-family: 'Jost', sans-serif;
+      font-size: 11px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 1px; cursor: pointer; transition: all 0.15s; text-decoration: none;
+      display: inline-block;
     }
-    .nav-brand span {
-      color: var(--gold-light);
-      font-weight: 400;
-      font-size: 13px;
-      font-family: 'Jost', sans-serif;
-      margin-left: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .nav-right {
-      font-size: 11px;
-      color: var(--gold-light);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 300;
-    }
+    .btn-logout:hover { background: rgba(184,150,46,0.15); }
 
-    .container {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 36px 40px 80px;
-    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 36px 40px 80px; }
 
-    /* Stats bar */
+    /* Stats */
     .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--cream-mid);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 28px;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--cream-mid); border-radius: var(--radius-lg);
+      overflow: hidden; margin-bottom: 28px;
       box-shadow: 0 2px 12px rgba(15,31,61,0.07);
     }
-    .stat-card {
-      background: var(--navy);
-      padding: 22px 26px;
-      border-right: 1px solid var(--navy-mid);
-      position: relative;
-    }
+    .stat-card { background: var(--navy); padding: 22px 26px; border-right: 1px solid var(--navy-mid); position: relative; }
     .stat-card:last-child { border-right: none; }
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 26px; right: 26px;
-      height: 2px;
-      background: var(--gold);
-      opacity: 0.4;
-    }
-    .stat-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--gold-light);
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--cream);
-      letter-spacing: -0.5px;
-      line-height: 1;
-    }
+    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 26px; right: 26px; height: 2px; background: var(--gold); opacity: 0.4; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-light); font-weight: 500; margin-bottom: 8px; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--cream); letter-spacing: -0.5px; line-height: 1; }
 
-    /* Main layout */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
+    /* Layout */
+    .main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
 
     /* Action panel */
-    .action-panel {
-      background: var(--navy);
-      border: 1px solid var(--navy-mid);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 2px 16px rgba(15,31,61,0.12);
-    }
+    .action-panel { background: var(--navy); border: 1px solid var(--navy-mid); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 2px 16px rgba(15,31,61,0.12); }
 
-    /* Tabs */
-    .tabs-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-bottom: 1px solid var(--navy-mid);
-    }
+    /* Inventory tabs */
+    .tabs-row { display: grid; border-bottom: 1px solid var(--navy-mid); }
+    .tabs-row.tabs-4 { grid-template-columns: repeat(4, 1fr); }
+    .tabs-row.tabs-2 { grid-template-columns: repeat(2, 1fr); }
     .tab {
-      padding: 13px 4px;
-      background: none;
-      border: none;
-      border-right: 1px solid var(--navy-mid);
-      color: var(--text-dim);
-      font-family: 'Jost', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.15s;
-      text-align: center;
+      padding: 13px 4px; background: none; border: none; border-right: 1px solid var(--navy-mid);
+      color: var(--text-dim); font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 500;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s; text-align: center;
     }
     .tab:last-child { border-right: none; }
-    .tab:hover:not(.active) { background: var(--navy-mid); color: var(--cream); }
-    .tab.active {
-      background: var(--gold);
-      color: var(--navy);
-      font-weight: 600;
-    }
+    .tab:hover:not(.active):not(.tab-locked) { background: var(--navy-mid); color: var(--cream); }
+    .tab.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+    .tab.tab-locked { opacity: 0.35; cursor: not-allowed; }
 
     .form-area { padding: 22px 20px; }
+    .form-pane { display: none; }
+    .form-pane.active { display: block; }
 
     .field { margin-bottom: 14px; }
-    label {
-      display: block;
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--gold-light);
-      margin-bottom: 5px;
-    }
+    label { display: block; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold-light); margin-bottom: 5px; }
     input, select {
-      width: 100%;
-      padding: 9px 12px;
-      background: var(--navy-mid);
-      border: 1px solid rgba(184,150,46,0.25);
-      border-radius: var(--radius);
-      color: var(--cream);
-      font-family: 'Jost', sans-serif;
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.15s, background 0.15s;
-      appearance: none;
-      -webkit-appearance: none;
+      width: 100%; padding: 9px 12px; background: var(--navy-mid);
+      border: 1px solid rgba(184,150,46,0.25); border-radius: var(--radius);
+      color: var(--cream); font-family: 'Jost', sans-serif; font-size: 13px;
+      outline: none; transition: border-color 0.15s; appearance: none; -webkit-appearance: none;
     }
-    input:focus, select:focus {
-      border-color: var(--gold);
-      background: var(--navy-light);
-    }
+    input:focus, select:focus { border-color: var(--gold); background: var(--navy-light); }
     input::placeholder { color: var(--text-dim); }
     select option { background: var(--navy-mid); color: var(--cream); }
     select:disabled { opacity: 0.35; cursor: not-allowed; }
     input { cursor: text; }
-
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hint { font-size: 12px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; padding-bottom: 14px; border-bottom: 1px solid var(--navy-mid); }
 
-    .hint {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-bottom: 16px;
-      line-height: 1.5;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--navy-mid);
-    }
-
-    .stock-indicator {
-      font-size: 12px;
-      padding: 7px 11px;
-      border-radius: var(--radius);
-      margin-bottom: 14px;
-      display: none;
-      border: 1px solid;
-    }
+    .stock-indicator { font-size: 12px; padding: 7px 11px; border-radius: var(--radius); margin-bottom: 14px; display: none; border: 1px solid; }
     .stock-indicator.visible { display: block; }
     .stock-indicator.ok  { background: rgba(184,150,46,0.12); color: var(--gold-light); border-color: rgba(184,150,46,0.3); }
-    .stock-indicator.low { background: rgba(139,32,32,0.15);  color: #e08080;            border-color: rgba(139,32,32,0.4); }
+    .stock-indicator.low { background: rgba(139,32,32,0.15); color: #e08080; border-color: rgba(139,32,32,0.4); }
 
     /* Buttons */
-    .btn {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid;
-      border-radius: var(--radius);
-      font-family: 'Jost', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      cursor: pointer;
-      transition: all 0.15s;
-      margin-top: 4px;
-    }
-    .btn-restock {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: var(--navy);
-    }
+    .btn { width: 100%; padding: 11px; border: 1px solid; border-radius: var(--radius); font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: all 0.15s; margin-top: 4px; }
+    .btn-restock { background: var(--gold); border-color: var(--gold); color: var(--navy); }
     .btn-restock:hover { background: var(--gold-light); border-color: var(--gold-light); }
-    .btn-new {
-      background: transparent;
-      border-color: var(--gold);
-      color: var(--gold-light);
-    }
+    .btn-new { background: transparent; border-color: var(--gold); color: var(--gold-light); }
     .btn-new:hover { background: var(--gold); color: var(--navy); }
-    .btn-remove {
-      background: transparent;
-      border-color: rgba(139,32,32,0.6);
-      color: #e08080;
-    }
+    .btn-remove { background: transparent; border-color: rgba(139,32,32,0.6); color: #e08080; }
     .btn-remove:hover { background: rgba(139,32,32,0.25); }
-    .btn-price {
-      background: transparent;
-      border-color: rgba(184,150,46,0.4);
-      color: var(--gold-light);
-    }
+    .btn-price { background: transparent; border-color: rgba(184,150,46,0.4); color: var(--gold-light); }
     .btn-price:hover { background: rgba(184,150,46,0.15); }
+    .btn-staff { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+    .btn-staff:hover { background: var(--gold-light); }
+    .btn-sm { width: auto; padding: 6px 14px; font-size: 10px; margin-top: 0; }
 
-    .form-pane { display: none; }
-    .form-pane.active { display: block; }
+    /* Staff table */
+    .staff-table-wrap { margin-top: 16px; }
+    .staff-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0; border-bottom: 1px solid var(--navy-mid); gap: 8px;
+    }
+    .staff-row:last-child { border-bottom: none; }
+    .staff-name { font-size: 13px; color: var(--cream); flex: 1; }
+    .staff-role-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; border: 1px solid; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+    .badge-manager  { color: var(--gold-light); border-color: rgba(184,150,46,0.4); background: rgba(184,150,46,0.1); }
+    .badge-employee { color: var(--text-dim); border-color: rgba(107,127,168,0.4); background: rgba(107,127,168,0.1); }
+    .promote-btn { font-size: 10px; padding: 4px 10px; border-radius: var(--radius); border: 1px solid rgba(184,150,46,0.35); background: transparent; color: var(--gold-light); font-family: 'Jost', sans-serif; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+    .promote-btn:hover { background: rgba(184,150,46,0.15); }
+
+    /* Password section */
+    .section-divider { border: none; border-top: 1px solid var(--navy-mid); margin: 18px 0; }
 
     /* Toast */
     #toast {
-      position: fixed;
-      bottom: 28px; left: 50%;
+      position: fixed; bottom: 28px; left: 50%;
       transform: translateX(-50%) translateY(16px);
-      background: var(--navy);
-      border: 1px solid var(--gold);
-      border-radius: var(--radius);
-      padding: 12px 24px;
-      font-size: 13px;
-      color: var(--cream);
+      background: var(--navy); border: 1px solid var(--gold);
+      border-radius: var(--radius); padding: 12px 24px;
+      font-size: 13px; color: var(--cream);
       box-shadow: 0 8px 32px rgba(15,31,61,0.3);
-      opacity: 0;
-      transition: all 0.25s;
-      z-index: 100;
-      max-width: 90vw;
-      text-align: center;
-      font-family: 'Jost', sans-serif;
+      opacity: 0; transition: all 0.25s; z-index: 100;
+      max-width: 90vw; text-align: center; font-family: 'Jost', sans-serif;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     #toast.success { border-color: var(--gold-light); color: var(--gold-light); }
     #toast.error   { border-color: #e08080; color: #e08080; }
 
-    /* Inventory table panel */
-    .inventory-panel {
-      background: #ffffff;
-      border: 1px solid var(--cream-mid);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(15,31,61,0.07);
-    }
-    .inv-header {
-      padding: 16px 22px;
-      border-bottom: 1px solid var(--cream-mid);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: var(--cream-dark);
-    }
-    .inv-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      font-weight: 500;
-      color: var(--navy);
-      letter-spacing: 0.3px;
-    }
-    .search-box {
-      padding: 8px 12px;
-      background: var(--cream);
-      border: 1px solid var(--cream-mid);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: 'Jost', sans-serif;
-      font-size: 12px;
-      outline: none;
-      width: 190px;
-      transition: border-color 0.15s;
-      cursor: text;
-      appearance: none;
-    }
+    /* Inventory table */
+    .inventory-panel { background: #ffffff; border: 1px solid var(--cream-mid); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 2px 12px rgba(15,31,61,0.07); }
+    .inv-header { padding: 16px 22px; border-bottom: 1px solid var(--cream-mid); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--cream-dark); }
+    .inv-title { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 500; color: var(--navy); }
+    .search-box { padding: 8px 12px; background: var(--cream); border: 1px solid var(--cream-mid); border-radius: var(--radius); color: var(--text); font-family: 'Jost', sans-serif; font-size: 12px; outline: none; width: 190px; transition: border-color 0.15s; cursor: text; }
     .search-box:focus { border-color: var(--navy-light); }
     .search-box::placeholder { color: var(--text-dim); }
-
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th {
-      padding: 11px 20px;
-      text-align: left;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-dim);
-      font-weight: 500;
-      border-bottom: 1px solid var(--cream-mid);
-      background: var(--cream);
-      white-space: nowrap;
-      font-family: 'Jost', sans-serif;
-    }
-    tbody tr {
-      border-bottom: 1px solid var(--cream-mid);
-      transition: background 0.1s;
-    }
+    thead th { padding: 11px 20px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); font-weight: 500; border-bottom: 1px solid var(--cream-mid); background: var(--cream); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--cream-mid); transition: background 0.1s; }
     tbody tr:hover { background: var(--cream); }
     tbody tr:last-child { border-bottom: none; }
-    td {
-      padding: 13px 20px;
-      white-space: nowrap;
-      color: var(--text-mid);
-      font-family: 'Jost', sans-serif;
-    }
-    .td-type   { color: var(--navy); font-weight: 500; }
+    td { padding: 13px 20px; white-space: nowrap; color: var(--text-mid); }
+    .td-type { color: var(--navy); font-weight: 500; }
     .td-memory { color: var(--text-dim); font-size: 12px; }
-    .td-price  { color: var(--navy); font-weight: 500; font-family: 'Cormorant Garamond', serif; font-size: 15px; }
-
-    .qty-badge {
-      display: inline-block;
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
-      border: 1px solid;
-      font-family: 'Jost', sans-serif;
-    }
+    .td-price { color: var(--navy); font-weight: 500; font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+    .qty-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid; }
     .qty-high { background: #eaf4f0; color: #1e5c3a; border-color: #a8d4b8; }
     .qty-med  { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-bd); }
-    .qty-low  { background: var(--danger-bg);  color: var(--danger);  border-color: var(--danger-bd); }
-
-    .empty-state {
-      text-align: center;
-      padding: 56px 20px;
-      color: var(--text-dim);
-      font-size: 13px;
-    }
+    .qty-low  { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-bd); }
+    .empty-state { text-align: center; padding: 56px 20px; color: var(--text-dim); font-size: 13px; }
 
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -397,46 +177,42 @@
       .main-grid { grid-template-columns: 1fr; }
       .stats-bar { grid-template-columns: 1fr; }
       .field-row { grid-template-columns: 1fr; }
-      .tabs-row  { grid-template-columns: repeat(2, 1fr); }
+      .tabs-row.tabs-4 { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-brand">
-    iPhone Inventory
-    <span>Store Management</span>
+  <div class="nav-brand">iPhone Inventory <span>Store Management</span></div>
+  <div class="nav-right">
+    <div class="nav-user">
+      <div class="nav-user-name" id="nav-name">{{ full_name }}</div>
+      <div class="nav-user-role" id="nav-role">{{ role }}</div>
+    </div>
+    <a href="/logout" class="btn-logout">Sign Out</a>
   </div>
-  <div class="nav-right">Internal Use Only</div>
 </nav>
 
 <div class="container">
 
   <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-label">Unique Models</div>
-      <div class="stat-value" id="stat-models">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Units</div>
-      <div class="stat-value" id="stat-units">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Value</div>
-      <div class="stat-value" id="stat-value">—</div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Unique Models</div><div class="stat-value" id="stat-models">—</div></div>
+    <div class="stat-card"><div class="stat-label">Total Units</div><div class="stat-value" id="stat-units">—</div></div>
+    <div class="stat-card"><div class="stat-label">Total Value</div><div class="stat-value" id="stat-value">—</div></div>
   </div>
 
   <div class="main-grid">
 
-    <!-- Left: Actions -->
+    <!-- Left: Action Panel -->
     <div class="action-panel">
-      <div class="tabs-row">
-        <button class="tab active" onclick="switchTab('restock', this)">Restock</button>
-        <button class="tab" onclick="switchTab('new', this)">Add New</button>
-        <button class="tab" onclick="switchTab('remove', this)">Remove</button>
-        <button class="tab" onclick="switchTab('price', this)">Price</button>
+
+      <!-- Inventory tabs -->
+      <div class="tabs-row tabs-4" id="inv-tabs">
+        <button class="tab active" onclick="switchTab('restock', this, 'inv-tabs')">Restock</button>
+        <button class="tab" id="tab-new"    onclick="switchTab('new', this, 'inv-tabs')">Add New</button>
+        <button class="tab" onclick="switchTab('remove', this, 'inv-tabs')">Remove</button>
+        <button class="tab" id="tab-price"  onclick="switchTab('price', this, 'inv-tabs')">Price</button>
       </div>
 
       <div class="form-area">
@@ -444,65 +220,25 @@
         <!-- RESTOCK -->
         <div class="form-pane active" id="pane-restock">
           <p class="hint">Select an existing iPhone to increase its stock.</p>
-          <div class="field">
-            <label>iPhone Type</label>
-            <select id="rs-type" onchange="chainColor('rs')">
-              <option value="">— Select type —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Color</label>
-            <select id="rs-color" onchange="chainMemory('rs')" disabled>
-              <option value="">— Select color —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Memory</label>
-            <select id="rs-memory" onchange="showStock('rs')" disabled>
-              <option value="">— Select memory —</option>
-            </select>
-          </div>
+          <div class="field"><label>iPhone Type</label><select id="rs-type" onchange="chainColor('rs')"><option value="">— Select type —</option></select></div>
+          <div class="field"><label>Color</label><select id="rs-color" onchange="chainMemory('rs')" disabled><option value="">— Select color —</option></select></div>
+          <div class="field"><label>Memory</label><select id="rs-memory" onchange="showStock('rs')" disabled><option value="">— Select memory —</option></select></div>
           <div class="stock-indicator" id="rs-stock"></div>
-          <div class="field">
-            <label>Units to Add</label>
-            <input id="rs-qty" type="number" min="1" placeholder="e.g. 5"/>
-          </div>
+          <div class="field"><label>Units to Add</label><input id="rs-qty" type="number" min="1" placeholder="e.g. 5"/></div>
           <button class="btn btn-restock" onclick="handleRestock()">Restock Item</button>
         </div>
 
-        <!-- ADD NEW -->
+        <!-- ADD NEW (manager only) -->
         <div class="form-pane" id="pane-new">
-          <p class="hint">Introduce a new iPhone model not yet in the inventory.</p>
-          <div class="field">
-            <label>iPhone Type</label>
-            <input id="new-type" type="text" placeholder="e.g. iPhone 16 Pro Max"/>
+          <p class="hint">Introduce a new iPhone model not yet in inventory.</p>
+          <div class="field"><label>iPhone Type</label><input id="new-type" type="text" placeholder="e.g. iPhone 16 Pro Max"/></div>
+          <div class="field-row">
+            <div class="field"><label>Color</label><input id="new-color" type="text" placeholder="e.g. Natural Titanium"/></div>
+            <div class="field"><label>Memory</label><select id="new-memory"><option value="">Select</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select></div>
           </div>
           <div class="field-row">
-            <div class="field">
-              <label>Color</label>
-              <input id="new-color" type="text" placeholder="e.g. Natural Titanium"/>
-            </div>
-            <div class="field">
-              <label>Memory</label>
-              <select id="new-memory">
-                <option value="">Select</option>
-                <option>64GB</option>
-                <option>128GB</option>
-                <option>256GB</option>
-                <option>512GB</option>
-                <option>1TB</option>
-              </select>
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label>Price ($)</label>
-              <input id="new-price" type="number" step="0.01" min="0" placeholder="0.00"/>
-            </div>
-            <div class="field">
-              <label>Quantity</label>
-              <input id="new-qty" type="number" min="1" placeholder="1"/>
-            </div>
+            <div class="field"><label>Price ($)</label><input id="new-price" type="number" step="0.01" min="0" placeholder="0.00"/></div>
+            <div class="field"><label>Quantity</label><input id="new-qty" type="number" min="1" placeholder="1"/></div>
           </div>
           <button class="btn btn-new" onclick="handleAddNew()">Add to Inventory</button>
         </div>
@@ -510,63 +246,74 @@
         <!-- REMOVE -->
         <div class="form-pane" id="pane-remove">
           <p class="hint">Select an item and enter how many units to remove.</p>
-          <div class="field">
-            <label>iPhone Type</label>
-            <select id="rem-type" onchange="chainColor('rem')">
-              <option value="">— Select type —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Color</label>
-            <select id="rem-color" onchange="chainMemory('rem')" disabled>
-              <option value="">— Select color —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Memory</label>
-            <select id="rem-memory" onchange="showStock('rem')" disabled>
-              <option value="">— Select memory —</option>
-            </select>
-          </div>
+          <div class="field"><label>iPhone Type</label><select id="rem-type" onchange="chainColor('rem')"><option value="">— Select type —</option></select></div>
+          <div class="field"><label>Color</label><select id="rem-color" onchange="chainMemory('rem')" disabled><option value="">— Select color —</option></select></div>
+          <div class="field"><label>Memory</label><select id="rem-memory" onchange="showStock('rem')" disabled><option value="">— Select memory —</option></select></div>
           <div class="stock-indicator" id="rem-stock"></div>
-          <div class="field">
-            <label>Units to Remove</label>
-            <input id="rem-qty" type="number" min="1" placeholder="e.g. 2"/>
-          </div>
+          <div class="field"><label>Units to Remove</label><input id="rem-qty" type="number" min="1" placeholder="e.g. 2"/></div>
           <button class="btn btn-remove" onclick="handleRemove()">Remove from Stock</button>
         </div>
 
-        <!-- PRICE -->
+        <!-- PRICE (manager only) -->
         <div class="form-pane" id="pane-price">
           <p class="hint">Select an item to update its selling price.</p>
-          <div class="field">
-            <label>iPhone Type</label>
-            <select id="pr-type" onchange="chainColor('pr')">
-              <option value="">— Select type —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Color</label>
-            <select id="pr-color" onchange="chainMemory('pr')" disabled>
-              <option value="">— Select color —</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Memory</label>
-            <select id="pr-memory" onchange="showCurrentPrice('pr')" disabled>
-              <option value="">— Select memory —</option>
-            </select>
-          </div>
+          <div class="field"><label>iPhone Type</label><select id="pr-type" onchange="chainColor('pr')"><option value="">— Select type —</option></select></div>
+          <div class="field"><label>Color</label><select id="pr-color" onchange="chainMemory('pr')" disabled><option value="">— Select color —</option></select></div>
+          <div class="field"><label>Memory</label><select id="pr-memory" onchange="showCurrentPrice('pr')" disabled><option value="">— Select memory —</option></select></div>
           <div class="stock-indicator" id="pr-stock"></div>
-          <div class="field">
-            <label>New Price ($)</label>
-            <input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/>
-          </div>
+          <div class="field"><label>New Price ($)</label><input id="pr-price" type="number" step="0.01" min="0" placeholder="0.00"/></div>
           <button class="btn btn-price" onclick="handlePrice()">Update Price</button>
         </div>
 
+      </div><!-- /form-area -->
+
+      <!-- Staff management tabs (manager only) -->
+      <div id="staff-section" style="display:none; border-top: 1px solid var(--navy-mid);">
+        <div class="tabs-row tabs-2" id="staff-tabs">
+          <button class="tab active" onclick="switchTab('staff-add', this, 'staff-tabs')">Add Employee</button>
+          <button class="tab" onclick="switchTab('staff-list', this, 'staff-tabs')">Manage Staff</button>
+        </div>
+        <div class="form-area" style="padding-top:18px;">
+
+          <!-- ADD EMPLOYEE -->
+          <div class="form-pane active" id="pane-staff-add">
+            <p class="hint">Add a new employee or manager account.</p>
+            <div class="field"><label>Full Name</label><input id="st-name" type="text" placeholder="e.g. Jane Smith"/></div>
+            <div class="field"><label>Username</label><input id="st-user" type="text" placeholder="e.g. jane839"/></div>
+            <div class="field"><label>Password</label><input id="st-pass" type="password" placeholder="Min. 6 characters"/></div>
+            <div class="field"><label>Role</label>
+              <select id="st-role"><option value="employee">Employee</option><option value="manager">Manager</option></select>
+            </div>
+            <button class="btn btn-staff" onclick="handleAddStaff()">Add Employee</button>
+          </div>
+
+          <!-- MANAGE STAFF -->
+          <div class="form-pane" id="pane-staff-list">
+            <p class="hint">Promote or demote staff roles. You cannot change your own role.</p>
+            <div id="staff-list-body" class="staff-table-wrap"></div>
+          </div>
+
+          <!-- CHANGE PASSWORD (always visible) -->
+          <hr class="section-divider"/>
+          <p class="hint" style="margin-bottom:12px;">Change your own password.</p>
+          <div class="field"><label>Current Password</label><input id="pw-old" type="password" placeholder="Current password"/></div>
+          <div class="field"><label>New Password</label><input id="pw-new" type="password" placeholder="New password (min. 6 chars)"/></div>
+          <button class="btn btn-price" onclick="handleChangePassword()">Update Password</button>
+
+        </div>
       </div>
-    </div>
+
+      <!-- Change password for employees (no staff management) -->
+      <div id="employee-pw-section" style="display:none; border-top: 1px solid var(--navy-mid);">
+        <div class="form-area" style="padding-top:18px;">
+          <p class="hint">Change your own password.</p>
+          <div class="field"><label>Current Password</label><input id="epw-old" type="password" placeholder="Current password"/></div>
+          <div class="field"><label>New Password</label><input id="epw-new" type="password" placeholder="New password (min. 6 chars)"/></div>
+          <button class="btn btn-price" onclick="handleChangePasswordEmployee()">Update Password</button>
+        </div>
+      </div>
+
+    </div><!-- /action-panel -->
 
     <!-- Right: Inventory Table -->
     <div class="inventory-panel">
@@ -576,18 +323,8 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Color</th>
-              <th>Memory</th>
-              <th>Price</th>
-              <th>Stock</th>
-            </tr>
-          </thead>
-          <tbody id="inv-body">
-            <tr><td colspan="5" class="empty-state">Loading inventory...</td></tr>
-          </tbody>
+          <thead><tr><th>Model</th><th>Color</th><th>Memory</th><th>Price</th><th>Stock</th></tr></thead>
+          <tbody id="inv-body"><tr><td colspan="5" class="empty-state">Loading inventory...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -598,19 +335,27 @@
 <div id="toast"></div>
 
 <script>
-  let inventory = [];
+  let inventory   = [];
   let optionsTree = {};
+  const userRole  = "{{ role }}";
+
+  // Apply role restrictions on load
+  window.addEventListener('DOMContentLoaded', () => {
+    if (userRole !== 'manager') {
+      document.getElementById('tab-new').classList.add('tab-locked');
+      document.getElementById('tab-price').classList.add('tab-locked');
+      document.getElementById('employee-pw-section').style.display = 'block';
+    } else {
+      document.getElementById('staff-section').style.display = 'block';
+      loadStaff();
+    }
+  });
 
   async function loadAll() {
-    const [invRes, optRes] = await Promise.all([
-      fetch('/api/inventory'),
-      fetch('/api/options')
-    ]);
+    const [invRes, optRes] = await Promise.all([fetch('/api/inventory'), fetch('/api/options')]);
     inventory   = await invRes.json();
     optionsTree = await optRes.json();
-    updateStats();
-    renderTable();
-    populateTypeDropdowns();
+    updateStats(); renderTable(); populateTypeDropdowns();
   }
 
   function updateStats() {
@@ -618,154 +363,161 @@
     const totalValue = inventory.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
     document.getElementById('stat-models').textContent = inventory.length;
     document.getElementById('stat-units').textContent  = totalUnits.toLocaleString();
-    document.getElementById('stat-value').textContent  = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+    document.getElementById('stat-value').textContent  = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
   }
 
   function renderTable() {
     const q = document.getElementById('search').value.toLowerCase();
     const filtered = inventory.filter(i => Object.values(i).some(v => v.toLowerCase().includes(q)));
     const body = document.getElementById('inv-body');
-    if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="5" class="empty-state">No items found.</td></tr>`;
-      return;
-    }
+    if (!filtered.length) { body.innerHTML = `<tr><td colspan="5" class="empty-state">No items found.</td></tr>`; return; }
     body.innerHTML = filtered.map(i => {
       const qty = parseInt(i.quantity);
       const qc  = qty >= 8 ? 'qty-high' : qty >= 4 ? 'qty-med' : 'qty-low';
-      return `<tr>
-        <td class="td-type">${i.type}</td>
-        <td>${i.color}</td>
-        <td class="td-memory">${i.memory}</td>
-        <td class="td-price">$${parseFloat(i.price).toFixed(2)}</td>
-        <td><span class="qty-badge ${qc}">${qty}</span></td>
-      </tr>`;
+      return `<tr><td class="td-type">${i.type}</td><td>${i.color}</td><td class="td-memory">${i.memory}</td><td class="td-price">$${parseFloat(i.price).toFixed(2)}</td><td><span class="qty-badge ${qc}">${qty}</span></td></tr>`;
     }).join('');
   }
 
-  function switchTab(tab, el) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  function switchTab(tab, el, groupId) {
+    const group = document.getElementById(groupId);
+    group.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
-    document.querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
+    // Hide all form panes in the parent form-area
+    el.closest('.action-panel').querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
     document.getElementById('pane-' + tab).classList.add('active');
+    if (tab === 'staff-list') loadStaff();
   }
 
   function populateTypeDropdowns() {
-    const prefixes = ['rs', 'rem', 'pr'];
-    const types = Object.keys(optionsTree).sort();
-    prefixes.forEach(p => {
+    ['rs','rem','pr'].forEach(p => {
       const sel = document.getElementById(p + '-type');
       const cur = sel.value;
       sel.innerHTML = '<option value="">— Select type —</option>' +
-        types.map(t => `<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
+        Object.keys(optionsTree).sort().map(t => `<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
     });
   }
 
   function chainColor(prefix) {
-    const type = document.getElementById(prefix + '-type').value;
-    const cSel = document.getElementById(prefix + '-color');
-    const mSel = document.getElementById(prefix + '-memory');
+    const type = document.getElementById(prefix+'-type').value;
+    const cSel = document.getElementById(prefix+'-color');
+    const mSel = document.getElementById(prefix+'-memory');
     cSel.innerHTML = '<option value="">— Select color —</option>';
     mSel.innerHTML = '<option value="">— Select memory —</option>';
-    mSel.disabled = true;
-    hideStock(prefix);
+    mSel.disabled = true; hideStock(prefix);
     if (!type) { cSel.disabled = true; return; }
-    const colors = Object.keys(optionsTree[type] || {}).sort();
-    cSel.innerHTML += colors.map(c => `<option value="${c}">${c}</option>`).join('');
+    cSel.innerHTML += Object.keys(optionsTree[type]||{}).sort().map(c=>`<option value="${c}">${c}</option>`).join('');
     cSel.disabled = false;
   }
 
   function chainMemory(prefix) {
-    const type  = document.getElementById(prefix + '-type').value;
-    const color = document.getElementById(prefix + '-color').value;
-    const mSel  = document.getElementById(prefix + '-memory');
+    const type  = document.getElementById(prefix+'-type').value;
+    const color = document.getElementById(prefix+'-color').value;
+    const mSel  = document.getElementById(prefix+'-memory');
     mSel.innerHTML = '<option value="">— Select memory —</option>';
     hideStock(prefix);
     if (!color) { mSel.disabled = true; return; }
-    const memories = (optionsTree[type]?.[color] || []).sort();
-    mSel.innerHTML += memories.map(m => `<option value="${m}">${m}</option>`).join('');
+    mSel.innerHTML += (optionsTree[type]?.[color]||[]).sort().map(m=>`<option value="${m}">${m}</option>`).join('');
     mSel.disabled = false;
   }
 
   function showStock(prefix) {
-    const type   = document.getElementById(prefix + '-type').value;
-    const color  = document.getElementById(prefix + '-color').value;
-    const memory = document.getElementById(prefix + '-memory').value;
-    const el     = document.getElementById(prefix + '-stock');
+    const type=document.getElementById(prefix+'-type').value, color=document.getElementById(prefix+'-color').value, memory=document.getElementById(prefix+'-memory').value;
+    const el=document.getElementById(prefix+'-stock');
     if (!memory) { hideStock(prefix); return; }
-    const item = inventory.find(i =>
-      i.type.trim().toLowerCase()   === type.toLowerCase() &&
-      i.color.trim().toLowerCase()  === color.toLowerCase() &&
-      i.memory.trim().toLowerCase() === memory.toLowerCase()
-    );
+    const item=inventory.find(i=>i.type.trim().toLowerCase()===type.toLowerCase()&&i.color.trim().toLowerCase()===color.toLowerCase()&&i.memory.trim().toLowerCase()===memory.toLowerCase());
     if (!item) { hideStock(prefix); return; }
-    const qty = parseInt(item.quantity);
-    el.textContent = `Current stock: ${qty} unit${qty !== 1 ? 's' : ''}`;
-    el.className   = 'stock-indicator visible ' + (qty <= 3 ? 'low' : 'ok');
+    const qty=parseInt(item.quantity);
+    el.textContent=`Current stock: ${qty} unit${qty!==1?'s':''}`;
+    el.className='stock-indicator visible '+(qty<=3?'low':'ok');
   }
 
   function showCurrentPrice(prefix) {
-    const type   = document.getElementById(prefix + '-type').value;
-    const color  = document.getElementById(prefix + '-color').value;
-    const memory = document.getElementById(prefix + '-memory').value;
-    const el     = document.getElementById(prefix + '-stock');
+    const type=document.getElementById(prefix+'-type').value, color=document.getElementById(prefix+'-color').value, memory=document.getElementById(prefix+'-memory').value;
+    const el=document.getElementById(prefix+'-stock');
     if (!memory) { hideStock(prefix); return; }
-    const item = inventory.find(i =>
-      i.type.trim().toLowerCase()   === type.toLowerCase() &&
-      i.color.trim().toLowerCase()  === color.toLowerCase() &&
-      i.memory.trim().toLowerCase() === memory.toLowerCase()
-    );
+    const item=inventory.find(i=>i.type.trim().toLowerCase()===type.toLowerCase()&&i.color.trim().toLowerCase()===color.toLowerCase()&&i.memory.trim().toLowerCase()===memory.toLowerCase());
     if (!item) { hideStock(prefix); return; }
-    el.textContent = `Current price: $${parseFloat(item.price).toFixed(2)}`;
-    el.className   = 'stock-indicator visible ok';
+    el.textContent=`Current price: $${parseFloat(item.price).toFixed(2)}`;
+    el.className='stock-indicator visible ok';
   }
 
-  function hideStock(prefix) {
-    const el = document.getElementById(prefix + '-stock');
-    if (el) el.className = 'stock-indicator';
+  function hideStock(prefix) { const el=document.getElementById(prefix+'-stock'); if(el) el.className='stock-indicator'; }
+
+  async function post(url, body) {
+    const res  = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    return res.json();
   }
 
   async function handleRestock() {
-    const body = { type: document.getElementById('rs-type').value, color: document.getElementById('rs-color').value, memory: document.getElementById('rs-memory').value, quantity: document.getElementById('rs-qty').value };
-    const res  = await fetch('/api/restock', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
+    const data = await post('/api/restock', {type:document.getElementById('rs-type').value, color:document.getElementById('rs-color').value, memory:document.getElementById('rs-memory').value, quantity:document.getElementById('rs-qty').value});
+    showToast(data.message, data.success?'success':'error');
     if (data.success) { await loadAll(); clearInputs(['rs-qty']); }
   }
 
   async function handleAddNew() {
-    const body = { type: document.getElementById('new-type').value, color: document.getElementById('new-color').value, memory: document.getElementById('new-memory').value, price: document.getElementById('new-price').value, quantity: document.getElementById('new-qty').value };
-    const res  = await fetch('/api/add', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
+    const data = await post('/api/add', {type:document.getElementById('new-type').value, color:document.getElementById('new-color').value, memory:document.getElementById('new-memory').value, price:document.getElementById('new-price').value, quantity:document.getElementById('new-qty').value});
+    showToast(data.message, data.success?'success':'error');
     if (data.success) { await loadAll(); clearInputs(['new-type','new-color','new-memory','new-price','new-qty']); }
   }
 
   async function handleRemove() {
-    const body = { type: document.getElementById('rem-type').value, color: document.getElementById('rem-color').value, memory: document.getElementById('rem-memory').value, quantity: document.getElementById('rem-qty').value };
-    const res  = await fetch('/api/remove', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
+    const data = await post('/api/remove', {type:document.getElementById('rem-type').value, color:document.getElementById('rem-color').value, memory:document.getElementById('rem-memory').value, quantity:document.getElementById('rem-qty').value});
+    showToast(data.message, data.success?'success':'error');
     if (data.success) { await loadAll(); clearInputs(['rem-qty']); }
   }
 
   async function handlePrice() {
-    const body = { type: document.getElementById('pr-type').value, color: document.getElementById('pr-color').value, memory: document.getElementById('pr-memory').value, price: document.getElementById('pr-price').value };
-    const res  = await fetch('/api/update_price', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-    const data = await res.json();
-    showToast(data.message, data.success ? 'success' : 'error');
+    const data = await post('/api/update_price', {type:document.getElementById('pr-type').value, color:document.getElementById('pr-color').value, memory:document.getElementById('pr-memory').value, price:document.getElementById('pr-price').value});
+    showToast(data.message, data.success?'success':'error');
     if (data.success) { await loadAll(); clearInputs(['pr-price']); }
   }
 
-  function clearInputs(ids) {
-    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  async function handleAddStaff() {
+    const data = await post('/api/staff/add', {full_name:document.getElementById('st-name').value, username:document.getElementById('st-user').value, password:document.getElementById('st-pass').value, role:document.getElementById('st-role').value});
+    showToast(data.message, data.success?'success':'error');
+    if (data.success) { clearInputs(['st-name','st-user','st-pass']); loadStaff(); }
   }
 
+  async function promoteStaff(username, newRole) {
+    const data = await post('/api/staff/promote', {username, role: newRole});
+    showToast(data.message, data.success?'success':'error');
+    if (data.success) loadStaff();
+  }
+
+  async function loadStaff() {
+    const res    = await fetch('/api/staff');
+    const staff  = await res.json();
+    const body   = document.getElementById('staff-list-body');
+    const myUser = "{{ request.headers.get('X-User', '') }}";
+    body.innerHTML = staff.map(u => `
+      <div class="staff-row">
+        <span class="staff-name">${u.full_name}</span>
+        <span class="staff-role-badge ${u.role === 'manager' ? 'badge-manager' : 'badge-employee'}">${u.role}</span>
+        <button class="promote-btn" onclick="promoteStaff('${u.username}', '${u.role === 'manager' ? 'employee' : 'manager'}')">
+          ${u.role === 'manager' ? 'Demote' : 'Promote'}
+        </button>
+      </div>`).join('');
+  }
+
+  async function handleChangePassword() {
+    const data = await post('/api/staff/change_password', {old_password:document.getElementById('pw-old').value, new_password:document.getElementById('pw-new').value});
+    showToast(data.message, data.success?'success':'error');
+    if (data.success) clearInputs(['pw-old','pw-new']);
+  }
+
+  async function handleChangePasswordEmployee() {
+    const data = await post('/api/staff/change_password', {old_password:document.getElementById('epw-old').value, new_password:document.getElementById('epw-new').value});
+    showToast(data.message, data.success?'success':'error');
+    if (data.success) clearInputs(['epw-old','epw-new']);
+  }
+
+  function clearInputs(ids) { ids.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; }); }
+
   function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'show ' + type;
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='show '+type;
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.className = '', 3500);
+    t._timer=setTimeout(()=>t.className='', 3500);
   }
 
   loadAll();

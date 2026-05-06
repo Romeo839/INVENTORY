@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iPhone Inventory — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0f1f3d; --navy-mid: #1a3460; --navy-light: #254d8f;
+      --cream: #f5f0e8; --cream-dark: #ede5d4; --cream-mid: #e0d5c0;
+      --gold: #b8962e; --gold-light: #d4af5a; --text-dim: #6b7fa8;
+      --danger: #8b2020; --radius: 5px;
+    }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background: var(--navy);
+      border: 1px solid var(--navy-mid);
+      border-top: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 44px 40px 36px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 40px rgba(15,31,61,0.18);
+    }
+    .login-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+    .login-sub {
+      font-size: 11px;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--gold-light);
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px 13px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(184,150,46,0.25);
+      border-radius: var(--radius);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 16px;
+    }
+    input:focus { border-color: var(--gold); background: var(--navy-light); }
+    input::placeholder { color: var(--text-dim); }
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: var(--gold);
+      border: none;
+      border-radius: var(--radius);
+      color: var(--navy);
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+    .btn-login:hover { background: var(--gold-light); }
+    .error-msg {
+      font-size: 12px;
+      color: #e08080;
+      margin-top: 12px;
+      text-align: center;
+      min-height: 18px;
+    }
+    .footer-note {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <div class="login-title">iPhone Inventory</div>
+    <div class="login-sub">Store Management — Staff Login</div>
+    <div>
+      <label>Username</label>
+      <input id="username" type="text" placeholder="Enter your username" autocomplete="username"/>
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') doLogin()"/>
+      <button class="btn-login" onclick="doLogin()">Sign In</button>
+      <div class="error-msg" id="error"></div>
+    </div>
+  </div>
+  <div class="footer-note">Internal use only &mdash; Authorised staff only</div>
+
+  <script>
+    async function doLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errEl    = document.getElementById('error');
+      errEl.textContent = '';
+      if (!username || !password) { errEl.textContent = 'Please enter both username and password.'; return; }
+      const res  = await fetch('/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username, password}) });
+      const data = await res.json();
+      if (data.success) { window.location.href = '/'; }
+      else { errEl.textContent = data.message; }
+    }
+  </script>
+</body>
+</html>
